@@ -2,22 +2,14 @@ import React from "react";
 import {
   Box,
   Flex,
-  Text,
   Image,
   IconButton,
   Button,
   Stack,
-  Collapse,
-  Icon,
-  Link,
   Popover,
   PopoverTrigger,
-  PopoverContent,
   useDisclosure,
   useColorModeValue,
-  useBreakpointValue,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import logo from '../Images/polydashlogo.png';
@@ -92,15 +84,13 @@ export default function Navbar() {
 const DesktopNav = () => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
-  const popoverContentBgColor = useColorModeValue('white', 'gray.800');
 
-  // Define your navigation links here
   const navItems = [
     { label: 'Home', href: '#' },
-    { label: 'About', href: '#' },
-    { label: 'Services', href: '#' },
-    { label: 'Pricing', href: '#' },
-    { label: 'Contact', href: '#' },
+    { label: 'Orders', href: '#' },
+    { label: 'Drivers', href: '#' },
+    { label: 'Restaurants', href: '#' },
+    { label: 'Contact Us', href: '#' },
   ];
 
   return (
