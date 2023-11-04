@@ -1,20 +1,22 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./Pages/Landing.js";
-import DeliveryOrder from "./Pages/DeliveryOrder.js";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import DeliveryPage from "./Pages/DeliveryPage.js";
+import OrderPage from "./Pages/OrderPage.js";
+import SellerPage from "./Pages/SellerPage.js";
 import Home from "./Pages/Home.js";
 //import { Button } from '@chakra-ui/react';
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <Router>
         <Routes>
-          <Route path="/" element={<Home/ >}>
-            <Route path="deliveryorder" element={<DeliveryOrder />}/>
-          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/delivery" element={<DeliveryPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/selling" element={<SellerPage />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }

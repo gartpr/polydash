@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeliveryOrder = () => {
+const DeliveryPage = () => {
     return (
         <div>
             DeliveryOrder AAAH
@@ -8,4 +8,4 @@ const DeliveryOrder = () => {
     );
 }
 
-export default DeliveryOrder;
+export default DeliveryPage;
