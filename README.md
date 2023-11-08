@@ -17,8 +17,8 @@ npm start
 2. npm install \
 3. Go to Preferences in VSCode -> Search "Code Actions on Save" -> Click "Edit in settings.json" \
 4. Add this code to settings.json: \
-   ''' "editor.codeActionsOnSave": {
-   "source.fixAll.eslint": true,
-   "source.fixAll.stylelint": true  
-   } ''' \
+   "editor.codeActionsOnSave": { \
+   "source.fixAll.eslint": true, \
+   "source.fixAll.stylelint": true \
+   } \
 5. Save settings.json
