@@ -32,6 +32,9 @@ const Home = () => {
                   Sell
                 </Button>
               </Link>
+              <Link>
+                skm
+                </Link>
             </HStack>
           </VStack>
         </Center>
