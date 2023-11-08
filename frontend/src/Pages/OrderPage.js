@@ -7,37 +7,6 @@ import subway from '../Images/subway.jpg';
 import {db} from "../firebase-config"
 import { collection, getDocs } from "firebase/firestore"
 
-const restaurantsHardCoded = [
-    
-    {
-        id: 1,
-        name: 'Campus Market',
-        cuisine: 'Grill',
-        description: 'Food fried haha.',
-        image: market,
-    },
-    {
-        id: 2,
-        name: 'Subway',
-        cuisine: 'subs',
-        description: 'sambdwich',
-        image: subway,
-    },
-    {
-        id: 3,
-        name: 'Starbucks',
-        cuisine: 'coffee',
-        description: 'coffeeeeeee',
-        image: starby,
-    },
-    {
-        id: 4,
-        name: 'boof',
-        cuisine: 'aaf',
-        description: 'ooog',
-        image: starby,
-    }
-];
 
 const cartItems = [
     {
