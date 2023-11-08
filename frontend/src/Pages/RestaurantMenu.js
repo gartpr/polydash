@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import {db} from "../firebase-config"
+import { collection, getDocs } from "firebase/firestore"
 import {
   Container,
   Text,
@@ -12,6 +14,18 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 
 const RestaurantMenu = () => {
+  
+  const [restaurants,setRestaurants] = useState([])
+  const restaurantCollectionRef = collection(db,"restaurants")
+
+  useEffect(() => {
+    const getRestaurants = async() => {
+      const data = await getDocs(restaurantCollectionRef);
+      console.log(data)
+      setRestaurants(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
+    };
+    getRestaurants();
+  }, []);
   // Mock data for the restaurant and its menu items
 const restaurantName = 'Sample Restaurant';
 const menuItems = [
@@ -39,7 +53,17 @@ const [cartItems, setCart] = useState([
   };
 
 return (
+
     <Container maxW="container.lg">
+        <div>
+          {restaurants.map((restaurant) => {
+            return(
+              <div>
+                <h1>Name: {restaurant.name}</h1>
+              </div>
+            )
+          })}
+        </div>
         <Heading as="h1" size="xl" mt={4}>{restaurantName}</Heading>
         <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4} mt={4}>
             {menuItems.map((item) => (

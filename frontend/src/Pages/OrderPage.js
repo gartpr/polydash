@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Container, Text, Grid, Heading, AspectRatio, Link, HStack}  from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import market from '../Images/Campus_Market.jpg';
 import starby from '../Images/starbys.jpg';
 import subway from '../Images/subway.jpg';
+import {db} from "../firebase-config"
+import { collection, getDocs } from "firebase/firestore"
 
-const restaurants = [
+const restaurantsHardCoded = [
+    
     {
         id: 1,
         name: 'Campus Market',
@@ -50,6 +53,17 @@ const cartItems = [
 ];
 
 const OrderPage = () => {
+    const [restaurants,setRestaurants] = useState([])
+        const restaurantCollectionRef = collection(db,"restaurants")
+
+        useEffect(() => {
+            const getRestaurants = async() => {
+            const data = await getDocs(restaurantCollectionRef);
+            console.log(data)
+            setRestaurants(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
+            };
+            getRestaurants();
+        }, []);
     return (
         <Container maxW="unset" padding={0}>
             <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" 
