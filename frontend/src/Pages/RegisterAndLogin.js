@@ -1,53 +1,98 @@
 import React, { useState } from 'react';
-import Navbar from '../Components/NavBar';
-import { database } from '../firebase-config';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { useSafeLayoutEffect } from '@chakra-ui/react';
+import { database } from '../firebase-config';
 import './RegisterAndLogin.css';
 
 function RegisterAndLogin() {
-  const [login,setLogin] = useState(true)
-
+  const [isRightPanelActive, setRightPanelActive] = useState(false);
   const history = useNavigate();
+
+  const handlePanelChange = () => {
+    setRightPanelActive(!isRightPanelActive);
+  };
 
   const handleSubmit = (e, type) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    if(type === 'signup'){
-      createUserWithEmailAndPassword(database, email, password).then((data) => {
-        console.log(data, 'authData');
-        history('../')
-      }).catch(err=>{
-        alert(err.code)
-        setLogin(true)
-      });
-    } else{
-      signInWithEmailAndPassword(database, email, password).then((data) => {
-        console.log(data, 'authData');
-        history('../')
-      }).catch(err=>{
-        alert(err.code)
-      });
+
+    if (type === 'signup') {
+      createUserWithEmailAndPassword(database, email, password)
+        .then((data) => {
+          console.log(data, 'authData');
+          history('../');
+        })
+        .catch((err) => {
+          alert(err.code);
+          setRightPanelActive(true);
+        });
+    } else {
+      signInWithEmailAndPassword(database, email, password)
+        .then((data) => {
+          console.log(data, 'authData');
+          history('../');
+        })
+        .catch((err) => {
+          alert(err.code);
+        });
     }
-    
   };
+
+  console.log("Rendering with right panel active:", isRightPanelActive);
+
   return (
-    <div className="App">
-      {/* Registration and Login Screen*/}
-      <div className='row'>
-        <div className={login === false?'activeColor': 'pointer'} onClick={()=>setLogin(false)}>SignUp</div>
-        <div className={login === true?'activeColor': 'pointer'} onClick={()=>setLogin(true)}>SignIn</div>
+    <div className={`RegisterAndLogin ${isRightPanelActive ? 'right-panel-active' : ''}`}>
+      <div className={`form-container sign-up-container ${isRightPanelActive ? 'hidden' : ''}`}>
+        <form onSubmit={(e) => handleSubmit(e, 'signup')}>
+          <h1>Create Account</h1>
+          <div className="social-container">
+            <a href="#" className="social">
+              <i className="fab fa-google-plus-g"></i>
+            </a>
+          </div>
+          <span>or use your email for registration</span>
+          <input type="text" name="name" placeholder="Name" />
+          <input type="email" name="email" placeholder="Email" />
+          <input type="password" name="password" placeholder="Password" />
+          <button>Sign Up</button>
+        </form>
       </div>
-      <h1>{login?'SignIn': 'SignUp'}</h1>
-      <form onSubmit={(e) => handleSubmit(e, login?'signin' : 'signup')}>
-        <input name="email" placeholder="Email"></input>
-        <input name="password" type="password" placeholder="Password"></input>
-        <br></br>
-        <button>{login? 'SignIn' : 'Signup'}</button>
-      </form>
+      <div className={`form-container sign-in-container ${isRightPanelActive ? '' : 'hidden'}`}>
+        <form onSubmit={(e) => handleSubmit(e, 'signin')}>
+          <h1>Sign in</h1>
+          <div className="social-container">
+            <a href="#" className="social">
+              <i className="fab fa-google-plus-g"></i>
+            </a>
+          </div>
+          <span>or use your account</span>
+          <input type="email" name="email" placeholder="Email" />
+          <input type="password" name="password" placeholder="Password" />
+          <a href="#">Forgot your password?</a>
+          <button>Sign In</button>
+        </form>
+      </div>
+      <div className="overlay-container">
+        <div className={`overlay ${isRightPanelActive ? 'right-panel-active' : ''}`}>
+          <div className="overlay-panel overlay-right">
+            <h1>{isRightPanelActive ? 'Hello, Friend!' : 'Welcome Back!'}</h1>
+            <p>{isRightPanelActive ? 'Enter your personal details and start the journey with us' : 'To keep connected with us, please login with your personal info'}</p>
+            <button className="ghost" onClick={handlePanelChange}>
+              {isRightPanelActive ? 'Sign Up' : 'Sign In'}
+            </button>
+          </div>
+          <div className={`overlay-panel overlay-left ${isRightPanelActive ? 'right-panel-active' : ''}`}>
+            <h1>{isRightPanelActive ? 'Welcome Back!' : 'Hello, Friend!'}</h1>
+            <p>{isRightPanelActive ? 'To keep connected with us, please login with your personal info' : 'Enter your personal details and start the journey with us'}</p>
+            <button className="ghost" onClick={handlePanelChange}>
+              {isRightPanelActive ? 'Sign In' : 'Sign Up'}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
+
 export default RegisterAndLogin;

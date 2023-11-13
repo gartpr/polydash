@@ -20,7 +20,7 @@ const Home = () => {
 
   const handleClick = () => {
     signOut(database).then(val =>{
-      history('/signup')
+      history('/signin')
     })
   }
     return (
