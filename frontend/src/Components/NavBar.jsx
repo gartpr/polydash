@@ -56,26 +56,36 @@ export default function Navbar() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={600}
-            variant={'link'}
-            href={'#'}>
-            Sign In
-          </Button>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'#5CB8B2'}
-            href={'#'}
-            _hover={{
-              bg: 'pink.300',
-            }}>
-            Sign Up
-          </Button>
+          <Link to="/signup">
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              as={'a'}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'#5CB8B2'}
+              href={'/signup'}
+              _hover={{
+                bg: 'pink.300',
+              }}>
+              Sign In
+            </Button>
+          </Link>
+          <Link to="/signup">
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              as={'a'}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'#5CB8B2'}
+              href={'/signup'}
+              _hover={{
+                bg: 'pink.300',
+              }}>
+              Sign Up
+            </Button>
+          </Link>
         </Stack>
       </Flex>
     </Box>
