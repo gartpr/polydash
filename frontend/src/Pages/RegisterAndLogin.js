@@ -7,7 +7,7 @@ import { useSafeLayoutEffect } from '@chakra-ui/react';
 import './RegisterAndLogin.css';
 
 function RegisterAndLogin() {
-  const [login,setLogin] = useState(false)
+  const [login,setLogin] = useState(true)
 
   const history = useNavigate();
 
