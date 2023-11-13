@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { database } from '../firebase-config';
 import './RegisterAndLogin.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(false);
@@ -12,11 +14,25 @@ function RegisterAndLogin() {
     setRightPanelActive(!isRightPanelActive);
   };
 
+  const handleGoogleSignIn = async (e) => {
+    e.preventDefault(); // Prevent the default behavior of the event
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(database, provider);
+      console.log(result, 'Google Sign-In success');
+      history('../');
+    } catch (error) {
+      console.error(error, 'Google Sign-In error');
+    }
+  };
+  
+
   const handleSubmit = (e, type) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
+    
     if (type === 'signup') {
       createUserWithEmailAndPassword(database, email, password)
         .then((data) => {
@@ -37,6 +53,9 @@ function RegisterAndLogin() {
           alert(err.code);
         });
     }
+    if (type === 'google') {
+      handleGoogleSignIn();
+    }
   };
 
   console.log("Rendering with right panel active:", isRightPanelActive);
@@ -47,8 +66,8 @@ function RegisterAndLogin() {
         <form onSubmit={(e) => handleSubmit(e, 'signup')}>
           <h1>Create Account</h1>
           <div className="social-container">
-            <a href="#" className="social">
-              <i className="fab fa-google-plus-g"></i>
+            <a href="#" className="social" onClick={(e) => handleGoogleSignIn(e)}>
+            <FontAwesomeIcon icon={faGooglePlusG} />
             </a>
           </div>
           <span>or use your email for registration</span>
@@ -62,8 +81,8 @@ function RegisterAndLogin() {
         <form onSubmit={(e) => handleSubmit(e, 'signin')}>
           <h1>Sign in</h1>
           <div className="social-container">
-            <a href="#" className="social">
-              <i className="fab fa-google-plus-g"></i>
+            <a href="#" className="social" onClick={(e) => handleGoogleSignIn(e)}>
+            <FontAwesomeIcon icon={faGooglePlusG} />
             </a>
           </div>
           <span>or use your account</span>
