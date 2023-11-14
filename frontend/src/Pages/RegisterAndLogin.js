@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 
 function RegisterAndLogin() {
-  const [isRightPanelActive, setRightPanelActive] = useState(false);
+  const [isRightPanelActive, setRightPanelActive] = useState(true);
   const history = useNavigate();
 
   const handlePanelChange = () => {
