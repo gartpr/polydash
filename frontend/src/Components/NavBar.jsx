@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -14,9 +14,29 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import logo from '../Images/polydashlogo.png';
+import { useNavigate } from 'react-router-dom';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { database } from '../firebase-config';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(database, (user) => {
+      setIsAuthenticated(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleClick = () => {
+    signOut(database).then(val =>{
+      history('/signin')
+    })
+  };
 
   return (
     <Box>
@@ -56,6 +76,20 @@ export default function Navbar() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
+          {isAuthenticated ? (
+          <Button
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'#5CB8B2'} // Change the color as needed
+            onClick={handleClick}
+            _hover={{
+              bg: 'pink.300',
+            }}
+          >
+            Sign Out
+          </Button>
+        ) : (
           <Link to="/signin">
             <Button
               display={{ base: 'none', md: 'inline-flex' }}
@@ -63,14 +97,16 @@ export default function Navbar() {
               fontSize={'sm'}
               fontWeight={600}
               color={'white'}
-              bg={'#0da955'}
+              bg={'#5CB8B2'}
               href={'/signin'}
               _hover={{
                 bg: 'pink.300',
-              }}>
+              }}
+            >
               Sign In
             </Button>
           </Link>
+        )}
         </Stack>
       </Flex>
     </Box>

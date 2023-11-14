@@ -1,28 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Center, VStack, HStack, Button, Text}  from '@chakra-ui/react';
 import logo from '../Images/polydashlogogreen.png';
 import { Link } from "react-router-dom";
-import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { database } from '../firebase-config';
-import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const history = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(database, (user) => {
-      setIsAuthenticated(!!user);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const handleClick = () => {
-    signOut(database).then(val =>{
-      history('/signin')
-    })
-  }
     return (
       <div>
         <Center h="100vh">
@@ -51,11 +33,6 @@ const Home = () => {
                   Sell
                 </Button>
               </Link>
-              {isAuthenticated && (
-                <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline" onClick={handleClick}>
-                  SignOut
-                </Button>
-              )}
             </HStack>
           </VStack>
         </Center>
