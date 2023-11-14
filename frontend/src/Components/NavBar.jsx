@@ -63,7 +63,7 @@ export default function Navbar() {
               fontSize={'sm'}
               fontWeight={600}
               color={'white'}
-              bg={'#5CB8B2'}
+              bg={'#0da955'}
               href={'/signin'}
               _hover={{
                 bg: 'pink.300',
