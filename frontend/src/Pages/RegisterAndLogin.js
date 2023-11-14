@@ -5,6 +5,7 @@ import { database } from '../firebase-config';
 import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(true);
@@ -58,6 +59,10 @@ function RegisterAndLogin() {
     }
   };
 
+  const handleReset = () => {
+    history("/reset")
+  }
+
   console.log("Rendering with right panel active:", isRightPanelActive);
 
   return (
@@ -88,7 +93,9 @@ function RegisterAndLogin() {
           <span>or use your account</span>
           <input type="email" name="email" placeholder="Email" />
           <input type="password" name="password" placeholder="Password" />
-          <a href="#">Forgot your password?</a>
+          <Link to="/reset">
+          <h2 onClick={handleReset}>Forgot your password?</h2>
+          </Link>
           <button>Sign In</button>
         </form>
       </div>
