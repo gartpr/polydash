@@ -1,32 +1,39 @@
-import { sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 import React from "react";
-import { database } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { database } from "../firebase-config";
+import "./ForgotPassword.css";
 
-function ForgotPassword(){
+function ForgotPassword() {
     const history = useNavigate();
 
-    const handleSubmit = async(e) => {
-        e.preventDefault()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         const emailVal = e.target.email.value;
-        sendPasswordResetEmail(database, emailVal).then(data=>{
-            alert("Check your gmail")
-            history('/signin')
-        }).catch(err=>{
-            alert(err.code)
-        })
-    }
-    
-    return(
+        sendPasswordResetEmail(database, emailVal)
+            .then(() => {
+                alert("Check your email for password reset instructions.");
+                history('/signin');
+            })
+            .catch((err) => {
+                alert(err.code);
+            });
+    };
+
+    return (
         <div>
-            <h1>Forgot Password</h1>
-            <form onSubmit={(e)=>handleSubmit(e)}>
-                <br></br>
-                <input name="email"></input><br></br>
-                <br></br>
-                <button>reset</button>
-            </form>
+            <style>{'.forgot-password-body {font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh;}'}</style>
+            <div className="forgot-password-body">
+                <div className="reset-password-container">
+                    <h1 className="reset-password-title"><b>Forgot Password</b></h1><br></br>
+                    <form className="reset-password-form" onSubmit={(e) => handleSubmit(e)}>
+                        <input className="reset-password-input" name="email" placeholder="Enter your email" />
+                        <br></br><button className="reset-password-button" type="submit">Reset Password</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    )
+    );
 }
+
 export default ForgotPassword;
