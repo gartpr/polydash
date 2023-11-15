@@ -10,27 +10,10 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
+import { useCart } from '../Components/Cart';
 
 const OrderForm = () => {
-  // Mock cart data for demonstration
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      name: 'Item 1',
-      price: 10.99,
-    },
-    {
-      id: 2,
-      name: 'Item 2',
-      price: 7.49,
-    },
-  ]);
-
-  // Function to remove an item from the cart
-  const removeFromCart = (itemId) => {
-    const updatedCart = cart.filter((item) => item.id !== itemId);
-    setCart(updatedCart);
-  };
+  const { cartItems, removeFromCart, getCartTotal } = useCart();
 
   // State for location and payment information
   const [location, setLocation] = useState('');
@@ -39,7 +22,7 @@ const OrderForm = () => {
   // Function to place an order
   const placeOrder = () => {
     // Handle the order placement logic here, e.g., send data to a server
-    console.log('Order placed:', { cart, location, paymentInfo });
+    console.log('Order placed:', { cartItems, location, paymentInfo });
   };
 
   return (
@@ -48,7 +31,7 @@ const OrderForm = () => {
         <Text fontSize="2xl" fontWeight="bold">
           Cart Summary
         </Text>
-        {cart.map((item) => (
+        {cartItems.map((item) => (
           <HStack key={item.id} justifyContent="space-between" w="100%">
             <Text>{item.name}</Text>
             <Text>${item.price.toFixed(2)}</Text>
@@ -61,7 +44,7 @@ const OrderForm = () => {
             </Button>
           </HStack>
         ))}
-        <Text>Total: ${cart.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</Text>
+        <Text>Total: ${getCartTotal()}</Text>
       </VStack>
 
       <Box mt={4}>
@@ -92,7 +75,7 @@ const OrderForm = () => {
         mt={4}
         colorScheme="teal"
         onClick={placeOrder}
-        disabled={!cart.length || !location || !paymentInfo}
+        disabled={!cartItems.length || !location || !paymentInfo}
       >
         Place Order
       </Button>
