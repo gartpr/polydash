@@ -11,12 +11,13 @@ import {
   Heading,
   Link
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 const RestaurantMenu = () => {
+  const { restaurantId } = useParams();
   
-  const [menuItems,setmenuItems] = useState([])
-  const menuiCollectionRef = collection(db,"restaurants/6u5NHE7KDwhv89R2kFps/menu")
+  const [menuItems,setmenuItems] = useState([]);
+  const menuiCollectionRef = collection(db,`restaurants/${restaurantId}/menu`)
 
   useEffect(() => {
     const getMenu = async() => {
@@ -25,7 +26,7 @@ const RestaurantMenu = () => {
       setmenuItems(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
     };
     getMenu();
-  }, []);
+  }, [restaurantId]);
   // Mock data for the restaurant and its menu items
 const restaurantName = 'Sample Restaurant';
 const menuItems2= [

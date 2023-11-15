@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Text, Grid, Heading, AspectRatio, Link, HStack}  from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import market from '../Images/Campus_Market.jpg';
-import starby from '../Images/starbys.jpg';
-import subway from '../Images/subway.jpg';
 import {db} from "../firebase-config"
 import { collection, getDocs } from "firebase/firestore"
 
@@ -44,7 +41,7 @@ const OrderPage = () => {
                 <Link
                 key={restaurant.id}
                 as={RouterLink} 
-                to={`/order/menu`}
+                to={`/order/menu/${restaurant.id}`}
                 >
                     <Box
                     key={restaurant.id}

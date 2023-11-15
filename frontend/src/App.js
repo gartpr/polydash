@@ -18,7 +18,7 @@ function App() {
         <Route path="/order" element={<OrderPage />} />
         <Route path="/seller" element={<SellerPage />} />
         <Route path="/order/form" element={<OrderForm />} />
-        <Route path="/order/menu" element={<RestaurantMenu />} />
+        <Route path="/order/menu/:restaurantId" element={<RestaurantMenu />} /> 
         <Route path="/signin" element={<RegisterAndLogin />} />
         <Route path="/reset" element={<ForgotPassword />} />
       </Routes>
