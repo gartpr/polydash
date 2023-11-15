@@ -4,6 +4,7 @@ import logo from '../Images/polydashlogogreen.png';
 import { Link } from "react-router-dom";
 
 const Home = () => {
+
     return (
       <div>
         <Center h="100vh">
@@ -32,9 +33,6 @@ const Home = () => {
                   Sell
                 </Button>
               </Link>
-              <Link>
-                skm
-                </Link>
             </HStack>
           </VStack>
         </Center>
