@@ -27,11 +27,14 @@ const Home = () => {
                   Order
                 </Button>
               </Link>
-              <Link to="/selling">
+              <Link to="/seller">
                 <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
                   Sell
                 </Button>
               </Link>
+              <Link>
+                skm
+                </Link>
             </HStack>
           </VStack>
         </Center>

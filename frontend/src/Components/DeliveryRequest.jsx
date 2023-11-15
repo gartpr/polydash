@@ -8,7 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-const SellerRequest = ({ order }) => {
+const DeliveryRequest = ({ order }) => {
   return (
     <AccordionItem>
       <h2>
@@ -21,10 +21,10 @@ const SellerRequest = ({ order }) => {
       </h2>
       <AccordionPanel pb={4}>
         <Text fontWeight="bold">{order.customerName}</Text>
-        <Text mt={2}>{order.details}</Text>
+        <Text mt={2}>{order.location}</Text>
       </AccordionPanel>
     </AccordionItem>
   );
 };
 
-export default SellerRequest;
+export default DeliveryRequest;

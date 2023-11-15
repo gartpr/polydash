@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Center, VStack, HStack, Button, Text}  from '@chakra-ui/react';
-import logo from '../Images/polydashlogogreen.png';
+import { Box, Center, VStack, HStack, Button, Flex, Text, Accordion}  from '@chakra-ui/react';
+import SellerRequest from '../Components/SellerRequest';
 
 const SellerPage = () => {
     const orderRequests = [
@@ -13,36 +13,34 @@ const SellerPage = () => {
         {
           id: 2,
           title: 'Order #002',
-          customerName: 'John ',
+          customerName: 'John B',
           details: '1x Burger, 1x Fries',
+        },
+        {
+          id: 3,
+          title: 'Order #003',
+          customerName: 'Alexius Buntaran ',
+          details: '1x Chicken Tenders, 1x Fries, 1x Ranch',
         },
         // ... more orders
       ];
 
     return (
-      <Center h="100vh">
-        <VStack spacing={8}>
-          <Box>
-            <img src={logo} alt="App Logo" width="400" />
-          </Box>
-          <Box>
-            <Text fontSize="4xl" fontWeight="bold" color="#154734">
-              We Deliver, You FAA
-            </Text>
-          </Box>
-          <HStack spacing={8}>
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline" href="/delivery">
-              Deliver
-            </Button>
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline" href="/order">
-              Order
-            </Button>
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline" href="/selling">
-              Sell
-            </Button>
-          </HStack>
-        </VStack>
-      </Center>
+    <Flex direction="column" align="stretch" minH="100vh" pt={8} width="full">
+      <VStack spacing={8} align="stretch" maxWidth="container.xl" mx="auto" width="full">
+        <Text fontSize="4xl" fontWeight="bold" color="#154734">
+          Restaurants
+        </Text>
+        <Text fontSize="3xl" fontWeight="bold" color="#3A913F">
+          Active Order Requests
+        </Text>
+        <Accordion allowMultiple width="full" fontSize="lg">
+          {orderRequests.map((request) => (
+            <SellerRequest key={request.id} order={request} />
+          ))}
+        </Accordion>
+      </VStack>
+    </Flex>
     );
   };
   

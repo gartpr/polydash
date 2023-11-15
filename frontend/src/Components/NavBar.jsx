@@ -7,6 +7,7 @@ import {
   Button,
   Stack,
   Popover,
+  Link,
   PopoverTrigger,
   useDisclosure,
   useColorModeValue,
@@ -97,24 +98,22 @@ const DesktopNav = () => {
     <Stack direction={'row'} spacing={4}>
       {navItems.map((navItem) => (
         <Box key={navItem.label}>
-          <Popover trigger={'hover'} placement={'bottom-start'}>
-            <PopoverTrigger>
-              <Button
-                p={2}
-                height="36px"
-                href={navItem.href}
-                fontSize={'sm'}
-                fontWeight={700}
-                bg="#E4E3D3"
-                color={linkColor}
-                _hover={{
-                  textDecoration: 'none',
-                  color: linkHoverColor,
-                }}>
-                {navItem.label}
-              </Button>
-            </PopoverTrigger>
-          </Popover>
+          <Link to="/order">
+            <Button
+              p={2}
+              height="36px"
+              href={navItem.href}
+              fontSize={'sm'}
+              fontWeight={700}
+              bg="#E4E3D3"
+              color={linkColor}
+              _hover={{
+                textDecoration: 'none',
+                color: linkHoverColor,
+              }}>
+              {navItem.label}
+            </Button>
+          </Link>
         </Box>
       ))}
     </Stack>
