@@ -20,7 +20,9 @@ const OrderForm = () => {
   const [paymentInfo, setPaymentInfo] = useState('');
 
   // Function to place an order
-  const placeOrder = () => {
+  const placeOrder = async () => {
+    window.location.href = `/order/tracking/1111`;
+                                          //${order.id}
     // Handle the order placement logic here, e.g., send data to a server
     console.log('Order placed:', { cartItems, location, paymentInfo });
   };

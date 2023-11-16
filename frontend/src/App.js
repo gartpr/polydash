@@ -8,6 +8,7 @@ import OrderForm from './Pages/OrderForm.js';
 import RestaurantMenu from './Pages/RestaurantMenu.js';
 import RegisterAndLogin from './Pages/RegisterAndLogin.js';
 import ForgotPassword from './Pages/ForgotPassword';
+import OrderTracking from './Pages/OrderTracking.js';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/seller" element={<SellerPage />} />
         <Route path="/order/form" element={<OrderForm />} />
         <Route path="/order/menu/:restaurantId" element={<RestaurantMenu />} /> 
+        <Route path="/order/tracking/:orderId" element={<OrderTracking />} />
         <Route path="/signin" element={<RegisterAndLogin />} />
         <Route path="/reset" element={<ForgotPassword />} />
       </Routes>
