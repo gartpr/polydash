@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { database } from '../firebase-config';
+import { db } from '../firebase-config';
 import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
+import { collection, addDoc } from "firebase/firestore"
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(true);
@@ -21,6 +23,7 @@ function RegisterAndLogin() {
     try {
       const result = await signInWithPopup(database, provider);
       console.log(result, 'Google Sign-In success');
+      
       history('../');
     } catch (error) {
       console.error(error, 'Google Sign-In error');
@@ -28,16 +31,19 @@ function RegisterAndLogin() {
   };
   
 
-  const handleSubmit = (e, type) => {
+  const handleSubmit = async (e, type) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    
+    const userCollectionRef = collection(db,'users')
+    const userDocRef = await addDoc(userCollectionRef,{name: e.target.name.value, email: email});
     if (type === 'signup') {
       createUserWithEmailAndPassword(database, email, password)
-        .then((data) => {
+        .then(async (data) => {
           console.log(data, 'authData');
+          //Create user in database
+        
           history('../');
         })
         .catch((err) => {

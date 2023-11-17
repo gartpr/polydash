@@ -10,21 +10,48 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
+import { collection, addDoc } from "firebase/firestore"
+import { db } from "../firebase-config"
+import { useAuth } from '../context/AuthContext';
 import { useCart } from '../Components/Cart';
+
 
 const OrderForm = () => {
   const { cartItems, removeFromCart, getCartTotal } = useCart();
+  const user = useAuth();
 
   // State for location and payment information
   const [location, setLocation] = useState('');
+  const [name, setName] = useState('');
   const [paymentInfo, setPaymentInfo] = useState('');
+  const [commentInfo, setCommentInfo] = useState('');
 
+  const orderCollectionRef = collection(db,"orders");
   // Function to place an order
   const placeOrder = async () => {
-    window.location.href = `/order/tracking/1111`;
-                                          //${order.id}
+    const restaurantId = cart.length > 0 ? cart[0].restaurantId : null;
     // Handle the order placement logic here, e.g., send data to a server
-    console.log('Order placed:', { cartItems, location, paymentInfo });
+    try {
+      const orderDocRef = await addDoc(orderCollectionRef, {
+        uid: user.uid,
+        restaurantId: restaurantId,
+        name: name,
+        email: user.email,
+        location: location,
+        paymentInfo: paymentInfo,
+        commentInfo: commentInfo,
+        total: cart.reduce((acc, item) => acc + item.price, 0).toFixed(2),
+      });
+      const itemsCollectioNRef = collection(orderDocRef,'items');
+      for( const item of cart){
+        await addDoc(itemsCollectioNRef,item);
+      }
+      console.log('Order document added successfully:', orderDocRef.id);
+      window.location.href = `/order/tracking/1111`;
+    } catch (error) {
+      console.error('Error adding order document:', error);
+      alert("Something went wrong with your order")
+    }
   };
 
   return (
@@ -51,6 +78,18 @@ const OrderForm = () => {
 
       <Box mt={4}>
         <FormControl>
+          <FormLabel>Name for order</FormLabel>
+          <Input
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </FormControl>
+      </Box>
+
+      <Box mt={4}>
+        <FormControl>
           <FormLabel>Delivery Location</FormLabel>
           <Input
             type="text"
@@ -60,7 +99,7 @@ const OrderForm = () => {
           />
         </FormControl>
       </Box>
-
+      
       <Box mt={4}>
         <FormControl>
           <FormLabel>Payment Information</FormLabel>
@@ -69,6 +108,18 @@ const OrderForm = () => {
             placeholder="Enter payment information"
             value={paymentInfo}
             onChange={(e) => setPaymentInfo(e.target.value)}
+          />
+        </FormControl>
+      </Box>
+
+      <Box mt={4}>
+        <FormControl>
+          <FormLabel>Additional Comments</FormLabel>
+          <Input
+            type="text"
+            placeholder="Enter any comments"
+            value={commentInfo}
+            onChange={(e) => setCommentInfo(e.target.value)}
           />
         </FormControl>
       </Box>
