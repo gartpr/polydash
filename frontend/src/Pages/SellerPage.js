@@ -10,8 +10,12 @@ const SellerPage = () => {
       id: 1,
       title: 'Order #001',
       status: "Pending",
+      restaurantId: 3,
       restaurantName: "Mustang Lanes",
       customerName: 'Bob Smith',
+      customerEmail: "",
+      address: "",
+      paymentInfo: "",
       totalPrice: 12.45,
       comments: "",
       items: [
@@ -74,15 +78,15 @@ const SellerPage = () => {
         }
       ]
     }]);
-    // const orderCollectionRef = collection(db,"orders")
-    // useEffect(() => {
-    //   const getOrders = async() => {
-    //   const data = await getDocs(orderCollectionRef);
-    //   console.log(data)
-    //   setOrderRequests(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
-    //   };
-    //   getOrders();
-    // }, []);
+    const orderCollectionRef = collection(db,"orders")
+    useEffect(() => {
+      const getOrders = async() => {
+      const data = await getDocs(orderCollectionRef);
+      console.log(data)
+      setOrderRequests(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
+      };
+      getOrders();
+    }, []);
 
     const handleDenyOrder = (orderId) => {
       // Find the order that is being denied
