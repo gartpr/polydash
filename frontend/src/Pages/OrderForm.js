@@ -22,11 +22,13 @@ const OrderForm = () => {
       id: 1,
       name: 'Item 1',
       price: 10.99,
+      restaurantId: "124hdsf"
     },
     {
       id: 2,
       name: 'Item 2',
       price: 7.49,
+      restaurantId: "sdf4edsf"
     },
   ]);
 
@@ -38,19 +40,37 @@ const OrderForm = () => {
 
   // State for location and payment information
   const [location, setLocation] = useState('');
+  const [name, setName] = useState('');
   const [paymentInfo, setPaymentInfo] = useState('');
   const [commentInfo, setCommentInfo] = useState('');
 
   const orderCollectionRef = collection(db,"orders");
   // Function to place an order
   const placeOrder = async () => {
-
+    const restaurantId = cart.length > 0 ? cart[0].restaurantId : null;
     // Handle the order placement logic here, e.g., send data to a server
-    const orderDocRef = await addDoc(orderCollectionRef,{location: location, paymentInfo: paymentInfo, commentInfo: commentInfo, total: cart.reduce((acc, item) => acc + item.price, 0).toFixed(2)});
-    const itemsCollectioNRef = collection(orderDocRef,'items');
-    for( const item of cart){
-      await addDoc(itemsCollectioNRef,item);
+    try {
+      const orderDocRef = await addDoc(orderCollectionRef, {
+        uid: user.uid,
+        restaurantId: restaurantId,
+        name: name,
+        email: user.email,
+        location: location,
+        paymentInfo: paymentInfo,
+        commentInfo: commentInfo,
+        total: cart.reduce((acc, item) => acc + item.price, 0).toFixed(2),
+      });
+      const itemsCollectioNRef = collection(orderDocRef,'items');
+      for( const item of cart){
+        await addDoc(itemsCollectioNRef,item);
+      }
+      console.log('Order document added successfully:', orderDocRef.id);
+    } catch (error) {
+      console.error('Error adding order document:', error);
+      alert("Something went wrong with your order")
     }
+    
+    
     console.log('Order placed:', { cart, location, paymentInfo, user});
   };
 
@@ -75,6 +95,18 @@ const OrderForm = () => {
         ))}
         <Text>Total: ${cart.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</Text>
       </VStack>
+
+      <Box mt={4}>
+        <FormControl>
+          <FormLabel>Name for order</FormLabel>
+          <Input
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </FormControl>
+      </Box>
 
       <Box mt={4}>
         <FormControl>
