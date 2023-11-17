@@ -13,30 +13,12 @@ import {
 import { collection, addDoc } from "firebase/firestore"
 import { db } from "../firebase-config"
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../Components/Cart';
+
 
 const OrderForm = () => {
+  const { cartItems, removeFromCart, getCartTotal } = useCart();
   const user = useAuth();
-  // Mock cart data for demonstration
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      name: 'Item 1',
-      price: 10.99,
-      restaurantId: "124hdsf"
-    },
-    {
-      id: 2,
-      name: 'Item 2',
-      price: 7.49,
-      restaurantId: "sdf4edsf"
-    },
-  ]);
-
-  // Function to remove an item from the cart
-  const removeFromCart = (itemId) => {
-    const updatedCart = cart.filter((item) => item.id !== itemId);
-    setCart(updatedCart);
-  };
 
   // State for location and payment information
   const [location, setLocation] = useState('');
@@ -65,13 +47,11 @@ const OrderForm = () => {
         await addDoc(itemsCollectioNRef,item);
       }
       console.log('Order document added successfully:', orderDocRef.id);
+      window.location.href = `/order/tracking/1111`;
     } catch (error) {
       console.error('Error adding order document:', error);
       alert("Something went wrong with your order")
     }
-    
-    
-    console.log('Order placed:', { cart, location, paymentInfo, user});
   };
 
   return (
@@ -80,7 +60,7 @@ const OrderForm = () => {
         <Text fontSize="2xl" fontWeight="bold">
           Cart Summary
         </Text>
-        {cart.map((item) => (
+        {cartItems.map((item) => (
           <HStack key={item.id} justifyContent="space-between" w="100%">
             <Text>{item.name}</Text>
             <Text>${item.price.toFixed(2)}</Text>
@@ -93,7 +73,7 @@ const OrderForm = () => {
             </Button>
           </HStack>
         ))}
-        <Text>Total: ${cart.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</Text>
+        <Text>Total: ${getCartTotal()}</Text>
       </VStack>
 
       <Box mt={4}>
@@ -148,7 +128,7 @@ const OrderForm = () => {
         mt={4}
         colorScheme="teal"
         onClick={placeOrder}
-        disabled={!cart.length || !location || !paymentInfo}
+        disabled={!cartItems.length || !location || !paymentInfo}
       >
         Place Order
       </Button>
