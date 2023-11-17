@@ -35,22 +35,15 @@ const menuItems2= [
     { id: 3, name: 'Pasta', price: 10.49 },
 ];
 
-const [cartItems, setCart] = useState([
-    {
-      id: 1,
-      name: 'Item 1',
-      price: 10.99,
-    },
-    {
-      id: 2,
-      name: 'Item 2',
-      price: 7.49,
-    },
-  ]);
+const [cartItems, setCart] = useState([]);
 
   // Function to add an item to the cart
   const addToCart = (item) => {
-    setCart([...cartItems, item]);
+    const modifiedItem = {
+      ...item,
+      restaurantId: restaurantId,
+    };
+    setCart([...cartItems, modifiedItem]);
   };
 
 return (

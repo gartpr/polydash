@@ -10,6 +10,8 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
+import { collection, addDoc } from "firebase/firestore"
+import { db } from "../firebase-config"
 
 const OrderForm = () => {
   // Mock cart data for demonstration
@@ -35,10 +37,18 @@ const OrderForm = () => {
   // State for location and payment information
   const [location, setLocation] = useState('');
   const [paymentInfo, setPaymentInfo] = useState('');
+  const [commentInfo, setCommentInfo] = useState('');
 
+  const orderCollectionRef = collection(db,"orders");
   // Function to place an order
-  const placeOrder = () => {
+  const placeOrder = async () => {
+
     // Handle the order placement logic here, e.g., send data to a server
+    const orderDocRef = await addDoc(orderCollectionRef,{location: location, paymentInfo: paymentInfo, commentInfo: commentInfo, total: cart.reduce((acc, item) => acc + item.price, 0).toFixed(2)});
+    const itemsCollectioNRef = collection(orderDocRef,'items');
+    for( const item of cart){
+      await addDoc(itemsCollectioNRef,item);
+    }
     console.log('Order placed:', { cart, location, paymentInfo });
   };
 
@@ -75,7 +85,7 @@ const OrderForm = () => {
           />
         </FormControl>
       </Box>
-
+      
       <Box mt={4}>
         <FormControl>
           <FormLabel>Payment Information</FormLabel>
@@ -84,6 +94,18 @@ const OrderForm = () => {
             placeholder="Enter payment information"
             value={paymentInfo}
             onChange={(e) => setPaymentInfo(e.target.value)}
+          />
+        </FormControl>
+      </Box>
+
+      <Box mt={4}>
+        <FormControl>
+          <FormLabel>Additional Comments</FormLabel>
+          <Input
+            type="text"
+            placeholder="Enter any comments"
+            value={commentInfo}
+            onChange={(e) => setCommentInfo(e.target.value)}
           />
         </FormControl>
       </Box>
