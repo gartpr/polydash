@@ -29,7 +29,7 @@ const OrderForm = () => {
   const orderCollectionRef = collection(db,"orders");
   // Function to place an order
   const placeOrder = async () => {
-    const restaurantId = cart.length > 0 ? cart[0].restaurantId : null;
+    const restaurantId = cartItems.length > 0 ? cartItems[0].restaurantId : null;
     // Handle the order placement logic here, e.g., send data to a server
     try {
       const orderDocRef = await addDoc(orderCollectionRef, {
@@ -40,10 +40,10 @@ const OrderForm = () => {
         location: location,
         paymentInfo: paymentInfo,
         commentInfo: commentInfo,
-        total: cart.reduce((acc, item) => acc + item.price, 0).toFixed(2),
+        total: cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2),
       });
       const itemsCollectioNRef = collection(orderDocRef,'items');
-      for( const item of cart){
+      for( const item of cartItems){
         await addDoc(itemsCollectioNRef,item);
       }
       console.log('Order document added successfully:', orderDocRef.id);

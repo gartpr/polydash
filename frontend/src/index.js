@@ -12,15 +12,15 @@ import { CartProvider } from './Components/Cart';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <ChakraProvider>
+    <ChakraProvider>
+      <AuthProvider>
         <CartProvider>
           <Router>
             <Navbar />
             <App />
           </Router>
         </CartProvider>
-      </ChakraProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ChakraProvider>
   </React.StrictMode>
 );
