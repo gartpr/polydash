@@ -38,8 +38,9 @@ const CartProvider = ({ children }) => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    const addToCart = (item) => {
-        setCartItems([...cartItems, item]);
+    const addToCart = (item,restaurantId) => {
+        const itemWithRestaurantId = { ...item, restaurantId: restaurantId };
+        setCartItems([...cartItems, itemWithRestaurantId]);
     };
 
     const removeFromCart = (itemId) => {

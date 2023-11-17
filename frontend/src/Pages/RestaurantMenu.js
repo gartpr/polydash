@@ -45,7 +45,7 @@ return (
                             <Button
                                 size="sm"
                                 colorScheme="teal"
-                                onClick={() => addToCart(item)}
+                                onClick={() => addToCart(item,restaurantId)}
                             > Add to Cart </Button>
                         </HStack>
                     </Box>

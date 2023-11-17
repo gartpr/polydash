@@ -21,10 +21,10 @@ const OrderForm = () => {
   const user = useAuth();
 
   // State for location and payment information
-  const [location, setLocation] = useState('');
+  const [address, setAddress] = useState('');
   const [name, setName] = useState('');
   const [paymentInfo, setPaymentInfo] = useState('');
-  const [commentInfo, setCommentInfo] = useState('');
+  const [comments, setComments] = useState('');
 
   const orderCollectionRef = collection(db,"orders");
   // Function to place an order
@@ -37,10 +37,11 @@ const OrderForm = () => {
         restaurantId: restaurantId,
         name: name,
         email: user.email,
-        location: location,
+        address: address,
         paymentInfo: paymentInfo,
-        commentInfo: commentInfo,
+        comments: comments,
         total: cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2),
+        status: "Pending"
       });
       const itemsCollectioNRef = collection(orderDocRef,'items');
       for( const item of cartItems){
@@ -94,8 +95,8 @@ const OrderForm = () => {
           <Input
             type="text"
             placeholder="Enter delivery location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
         </FormControl>
       </Box>
@@ -118,8 +119,8 @@ const OrderForm = () => {
           <Input
             type="text"
             placeholder="Enter any comments"
-            value={commentInfo}
-            onChange={(e) => setCommentInfo(e.target.value)}
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
           />
         </FormControl>
       </Box>
@@ -128,7 +129,7 @@ const OrderForm = () => {
         mt={4}
         colorScheme="teal"
         onClick={placeOrder}
-        disabled={!cartItems.length || !location || !paymentInfo}
+        disabled={!cartItems.length || !address || !paymentInfo}
       >
         Place Order
       </Button>
