@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database } from '../firebase-config';
-import { db } from '../firebase-config';
+import { database, db } from '../firebase-config'; // Assuming you have 'firestore' in your 'firebase-config'
 import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
-import { collection, addDoc } from "firebase/firestore"
+import { doc, setDoc } from 'firebase/firestore';
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(true);
@@ -18,33 +17,87 @@ function RegisterAndLogin() {
   };
 
   const handleGoogleSignIn = async (e) => {
-    e.preventDefault(); // Prevent the default behavior of the event
+    e.preventDefault();
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(database, provider);
       console.log(result, 'Google Sign-In success');
-      
+
+      // Assuming you have a function to add/update user data
+      addUserDocument(result.user);
+
       history('../');
     } catch (error) {
       console.error(error, 'Google Sign-In error');
     }
   };
-  
+
+  const updateUserDatabase = async (userId, name, email) => {
+    const userRef = doc(db, 'users', userId);
+    await setDoc(userRef, {
+      name: name,
+      email: email,
+    });
+  };
+
+  const addUserDocument = (user) => {
+    const userEmail = user.email;
+
+    // Assuming you have a function to add/update user data
+    addUserDocumentToFirestore(user);
+  };
+
+  const addUserDocumentToFirestore = (user) => {
+    const usersCollection = db.collection("users");
+
+    const userEmail = user.email;
+
+    // Check if the user with the same email already exists
+    usersCollection.where("email", "==", userEmail)
+      .get()
+      .then(querySnapshot => {
+        if (querySnapshot.empty) {
+          // User doesn't exist, add a new user document
+          usersCollection.add({
+            email: userEmail,
+            name: user.displayName,
+            // Add more user-specific fields as needed
+          })
+            .then((docRef) => {
+              console.log("Document added with ID:", docRef.id);
+            })
+            .catch(error => {
+              console.error("Error adding document:", error);
+            });
+        } else {
+          console.log("Document with the same email already exists");
+        }
+      });
+  };
 
   const handleSubmit = async (e, type) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const userCollectionRef = collection(db,'users')
-    const userDocRef = await addDoc(userCollectionRef,{name: e.target.name.value, email: email});
+    const isFirstSignIn = !localStorage.getItem('userSignedIn');
     if (type === 'signup') {
       createUserWithEmailAndPassword(database, email, password)
         .then(async (data) => {
           console.log(data, 'authData');
           //Create user in database
-        
-          history('../');
+          const userId = data.user.uid;
+
+          // Update user data in the database
+          updateUserDatabase(userId, e.target.name.value, email);
+
+          localStorage.setItem('userSignedIn', 'true');
+
+          if (isFirstSignIn) {
+            history('/UserInformation');
+          } else {
+            history('../');
+          }
         })
         .catch((err) => {
           alert(err.code);
@@ -54,7 +107,11 @@ function RegisterAndLogin() {
       signInWithEmailAndPassword(database, email, password)
         .then((data) => {
           console.log(data, 'authData');
-          history('../');
+          if (isFirstSignIn) {
+            history('/UserInformation');
+          } else {
+            history('../');
+          }
         })
         .catch((err) => {
           alert(err.code);
