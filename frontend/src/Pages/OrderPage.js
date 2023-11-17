@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Text, Grid, Heading, AspectRatio, Link, HStack}  from '@chakra-ui/react';
+import { Box, Container, Text, Grid, Heading, AspectRatio, Link}  from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import {db} from "../firebase-config"
 import { collection, getDocs } from "firebase/firestore"
+import { useCart, Cart } from '../Components/Cart';
 
-
-const cartItems = [
+/*const cartItems = [
     {
       id: 1,
       name: 'Item 1',
@@ -16,11 +16,13 @@ const cartItems = [
       name: 'Item 2',
       price: 7.49,
     },
-];
+];*/
 
 const OrderPage = () => {
-    const [restaurants,setRestaurants] = useState([])
-        const restaurantCollectionRef = collection(db,"restaurants")
+    const { cartItems, addToCart, getCartTotal } = useCart();
+
+    const [restaurants,setRestaurants] = useState([]);
+    const restaurantCollectionRef = collection(db,"restaurants");
 
         useEffect(() => {
             const getRestaurants = async() => {
@@ -29,7 +31,8 @@ const OrderPage = () => {
             setRestaurants(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
             };
             getRestaurants();
-        }, []);
+        }, [restaurantCollectionRef]);
+
     return (
         <Container maxW="unset" padding={0}>
             <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" 
@@ -62,21 +65,7 @@ const OrderPage = () => {
                     </Box>
                 </Link>
             ))}
-                <Link as={RouterLink} to="/order/form">
-                    <Box borderWidth="1px" borderRadius="lg" p={2} maxW="300px">
-                        <Text fontSize="lg" textAlign="center">Cart Summary</Text>
-                        {cartItems.map((item) => (
-                            <HStack key={item.id} justifyContent="space-between">
-                                <Text>{item.name}</Text>
-                                <Text>${item.price.toFixed(2)}</Text>
-                            </HStack>
-                        ))}
-                        <HStack justifyContent="space-between">
-                            <Text>Total:</Text>
-                            <Text>${cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2)}</Text>
-                        </HStack>
-                    </Box>
-                </Link>
+                <Cart cartItems={cartItems} addToCart={addToCart} getCartTotal={getCartTotal} />
             </Grid>
         </Container>
     );
