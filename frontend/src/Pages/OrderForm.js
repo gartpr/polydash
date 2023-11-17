@@ -12,8 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { collection, addDoc } from "firebase/firestore"
 import { db } from "../firebase-config"
+import { useAuth } from '../context/AuthContext';
 
 const OrderForm = () => {
+  const user = useAuth();
   // Mock cart data for demonstration
   const [cart, setCart] = useState([
     {
@@ -49,7 +51,7 @@ const OrderForm = () => {
     for( const item of cart){
       await addDoc(itemsCollectioNRef,item);
     }
-    console.log('Order placed:', { cart, location, paymentInfo });
+    console.log('Order placed:', { cart, location, paymentInfo, user});
   };
 
   return (
