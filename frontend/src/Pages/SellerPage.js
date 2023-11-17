@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
-import { VStack, Flex, Text, Box, Accordion}  from '@chakra-ui/react';
+import React, {useState, useEffect} from 'react';
+import { VStack, Flex, Text, Box, Accordion, Button}  from '@chakra-ui/react';
 import SellerRequest from '../Components/SellerRequest';
+import {db} from "../firebase-config"
+import { collection, getDocs } from "firebase/firestore"
 
 const SellerPage = () => {
     const [pastOrderRequests, setPastOrderRequests] = useState([]);
@@ -17,6 +19,7 @@ const SellerPage = () => {
           itemId: 1,
           itemName: "Margharita Pizza",
           itemQuantity: 1,
+          itemCost: 12.45,
           itemComments: ""
         },
       ]
@@ -34,12 +37,14 @@ const SellerPage = () => {
           itemId: 1,
           itemName: "Orange Chicken w/ Rice",
           itemQuantity: 1,
+          itemCost: 10.00,
           itemComments: ""
         },
         {
           itemId: 2,
           itemName: "Tiramisu",
           itemQuantity: 1,
+          itemCost: 4.54,
           itemComments: "extra care"
         }
       ]
@@ -57,16 +62,51 @@ const SellerPage = () => {
           itemId: 1,
           itemName: "Chicken Tenders w/ Fries",
           itemQuantity: 1,
+          itemCost: 9.95,
           itemComments: ""
         },
         {
           itemId: 2,
           itemName: "Ranch",
           itemQuantity: 2,
+          itemCost: 0.00,
           itemComments: ""
         }
       ]
     }]);
+    // const orderCollectionRef = collection(db,"orders")
+    // useEffect(() => {
+    //   const getOrders = async() => {
+    //   const data = await getDocs(orderCollectionRef);
+    //   console.log(data)
+    //   setOrderRequests(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
+    //   };
+    //   getOrders();
+    // }, []);
+
+    const handleDenyOrder = (orderId) => {
+      // Find the order that is being denied
+      const orderToMove = orderRequests.find((order) => order.id === orderId);
+      
+      // Filter out the order from the current orderRequests
+      const updatedOrderRequests = orderRequests.filter((order) => order.id !== orderId);
+    
+      // Update the states
+      setOrderRequests(updatedOrderRequests);
+      setPastOrderRequests((prevOrders) => [...prevOrders, {...orderToMove, status: "Denied"}]);
+    };
+
+    const handleApproveOrder = (orderId) => {
+      // Find the order that is being approved
+      const orderToMove = orderRequests.find((order) => order.id === orderId);
+    
+      // Filter out the order from the current orderRequests
+      const updatedOrderRequests = orderRequests.filter((order) => order.id !== orderId);
+    
+      // Update the states
+      setOrderRequests(updatedOrderRequests);
+      setPastOrderRequests((prevOrders) => [...prevOrders, { ...orderToMove, status: "Approved" }]);
+    };
 
     return (
     <Flex direction="column" align="stretch" minH="100vh" pt={8} width="full">
@@ -80,7 +120,11 @@ const SellerPage = () => {
             </Text>
             <Accordion allowMultiple width="full" fontSize="lg">
               {orderRequests.map((request) => (
-                <SellerRequest key={request.id} order={request} />
+                <SellerRequest key={request.id} 
+                               order={request} 
+                               onDenyOrder={() => handleDenyOrder(request.id)}
+                               onApproveOrder={() => handleApproveOrder(request.id)}
+                               isPastOrder={false}/>
               ))}
             </Accordion>
         </Box>
@@ -90,7 +134,7 @@ const SellerPage = () => {
             </Text>
             <Accordion allowMultiple width="full" fontSize="lg">
               {pastOrderRequests.map((request) => (
-                <SellerRequest key={request.id} order={request} />
+                <SellerRequest key={request.id} order={request} isPastOrder={true} />
               ))}
             </Accordion>
         </Box>

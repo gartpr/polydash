@@ -4,37 +4,40 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Accordion,
   Box,
   Text,
+  Button,
+  Flex,
 } from '@chakra-ui/react';
+import SellerRequestItem from './SellerRequestItem';
 
-const SellerRequest = ({ order }) => {
+const SellerRequest = ({ order, onDenyOrder, onApproveOrder, isPastOrder }) => {
   return (
     <AccordionItem>
       <h2>
         <AccordionButton>
           <Box flex="1" textAlign="left">
-            <Text mt={2} fontWeight="semibold">{order.title}</Text>
-            <Text mt={2}>{order.status}</Text>
+            <Text mt={2} fontWeight="semibold">{order.title} - {order.status}</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
       </h2>
       <AccordionPanel pb={4}>
         <Text fontWeight="bold">{order.restaurantName}</Text> 
-        <Text mt= {2}>Customer: {order.customerName}</Text>
-        <Text mt={2}>Order: {order.details}</Text>
-        <Text mt={2}>{order.title}</Text>
-            <Text mt={2}>{order.status}</Text>
-            <Text mt={2}>{order.restaurantName}</Text>
-            <Text mt={2}>{order.customerName}</Text>
-            <Text mt={2}>{order.totalPrice}</Text>
-            <AccordionButton>
-              <Box flex="1" textAlign="left">
-                <Text mt={2} fontWeight="semibold">{order.title}</Text>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
+        <Text mt= {2}>Customer Name: {order.customerName}</Text>
+        <Text mt={2}>Total Price: ${order.totalPrice}</Text>
+        <Accordion allowMultiple width="full" fontSize="lg">
+          {order.items.map((item) => (
+            <SellerRequestItem key={item.itemId} item={item} />
+          ))}
+        </Accordion>
+        {!isPastOrder && (
+          <Flex justifyContent="flex-end" mt={4} pr={4}>
+            <Button colorScheme="green" onClick={onApproveOrder} mr={2}>Approve</Button>
+            <Button colorScheme="red" onClick={onDenyOrder}>Deny</Button>
+          </Flex>
+        )}
       </AccordionPanel>
     </AccordionItem>
   );
