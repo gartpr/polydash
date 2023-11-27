@@ -35,7 +35,7 @@ const OrderForm = () => {
       const orderDocRef = await addDoc(orderCollectionRef, {
         uid: user.uid,
         restaurantId: restaurantId,
-        name: name,
+        customerName: name,
         email: user.email,
         address: address,
         paymentInfo: paymentInfo,
