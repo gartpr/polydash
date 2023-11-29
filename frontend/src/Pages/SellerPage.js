@@ -80,7 +80,7 @@ const SellerPage = () => {
       setNewOrderRequests(newOrders);
       setActiveOrderRequests(activeOrders);
       setPastOrderRequests(pastOrders);
-    }, [activeOrderRequests, newOrderRequests, pastOrderRequests, orderRequests]);
+    }, [orderRequests]);
     
     const updateOrderStatus = async (orderId, newStatus) => {
       const orderRef = doc(db, "orders", orderId);
