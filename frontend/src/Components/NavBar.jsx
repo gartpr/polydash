@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import logo from '../Images/polydashlogo.png';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { database } from '../firebase-config';
 
@@ -64,7 +64,9 @@ export default function Navbar() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Image src={logo} width="auto" height="38px"/>
+          <Link as={RouterLink} to='/'>
+            <Image src={logo} width="auto" height="38px"/>
+          </Link>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
@@ -118,34 +120,33 @@ const DesktopNav = () => {
   const linkHoverColor = useColorModeValue('gray.800', 'white');
 
   const navItems = [
-    { label: 'Home', href: '#' },
-    { label: 'Orders', href: '#' },
-    { label: 'Drivers', href: '#' },
-    { label: 'Restaurants', href: '#' },
-    { label: 'Contact Us', href: '#' },
+    { label: 'Home', href: "/" },
+    { label: 'Orders', href: "/order" },
+    { label: 'Drivers', href: '/delivery' },
+    { label: 'Restaurants', href: '/seller' }
   ];
 
   return (
     <Stack direction={'row'} spacing={4}>
       {navItems.map((navItem) => (
-        <Box key={navItem.label}>
-          <Link to="/order">
+        <Link as={RouterLink} to={navItem.href}>
+          <Box key={navItem.label}>
             <Button
               p={2}
               height="36px"
-              href={navItem.href}
               fontSize={'sm'}
               fontWeight={700}
               bg="#E4E3D3"
               color={linkColor}
+              href={navItem.href}
               _hover={{
                 textDecoration: 'none',
                 color: linkHoverColor,
               }}>
               {navItem.label}
             </Button>
-          </Link>
-        </Box>
+          </Box>
+        </Link>
       ))}
     </Stack>
   );
