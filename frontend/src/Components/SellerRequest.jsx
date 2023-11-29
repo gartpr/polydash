@@ -13,10 +13,6 @@ import {
 import SellerRequestItem from './SellerRequestItem';
 
 const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
-  const handleStatusChange = (newStatus) => {
-    onUpdateOrderStatus(order.id, newStatus);
-  };
-
   return (
     <AccordionItem>
       <h2>
@@ -29,8 +25,8 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
       </h2>
       <AccordionPanel pb={4}>
       <Text fontWeight="bold">Order Information:</Text>
-        {/* <Text mt= {2}>Restaurant Name: {order.restaurant.name}</Text> 
-        <Text mt= {2}>Customer Name: {order.user.name}</Text> */}
+        <Text mt= {2}>Restaurant Name: {order.restaurant.name}</Text> 
+        <Text mt= {2}>Customer Name: {order.user.name}</Text>
         <Text mt= {2}>Customer Email: {order.user.email}</Text>
         <Text mt= {2}>Delivery Address: {order.address}</Text>
         <Text mt= {2}>Payment Method: {order.paymentInfo}</Text>
@@ -59,17 +55,5 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
     </AccordionItem>
   );
 };
-
-// List of Orders
-  // Restaurant Name
-  // Customer Name
-  // Total Price of Order
-  // List of Items
-    // Name
-    // Quantity
-    // Price
-    // Comments
-  // Comments
-  //Status
 
 export default SellerRequest;

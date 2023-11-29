@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { VStack, Flex, Text, Box, Accordion, Button}  from '@chakra-ui/react';
+import { VStack, Flex, Text, Box, Accordion}  from '@chakra-ui/react';
 import SellerRequest from '../Components/SellerRequest';
 import {db} from "../firebase-config"
 import { collection, getDocs, getDoc, updateDoc, doc, onSnapshot } from "firebase/firestore"
@@ -80,13 +80,8 @@ const SellerPage = () => {
       setNewOrderRequests(newOrders);
       setActiveOrderRequests(activeOrders);
       setPastOrderRequests(pastOrders);
-      console.log(orderRequests);
-      console.log(activeOrderRequests);
-      console.log(newOrderRequests);
-      console.log(pastOrderRequests);
-    }, [orderRequests]); // This effect runs whenever orderRequests changes
+    }, [activeOrderRequests, newOrderRequests, pastOrderRequests, orderRequests]);
     
-    // Helper function to update the status in Firestore and return the updated order
     const updateOrderStatus = async (orderId, newStatus) => {
       const orderRef = doc(db, "orders", orderId);
       await updateDoc(orderRef, {
@@ -116,10 +111,11 @@ const SellerPage = () => {
             </Text>
             {newOrderRequests.length > 0 ? (
               <Accordion allowMultiple width="full" fontSize="lg">
-                {activeOrderRequests.map((request) => (
+                {newOrderRequests.map((request) => (
                   <SellerRequest key={request.id} 
                                 order={request} 
-                                onUpdateOrderStatus={handleUpdateOrderStatus}/>
+                                onUpdateOrderStatus={handleUpdateOrderStatus}
+                                isPastOrder={false}/>
                 ))}
               </Accordion>
             ) : (
@@ -135,7 +131,8 @@ const SellerPage = () => {
                 {activeOrderRequests.map((request) => (
                   <SellerRequest key={request.id} 
                                 order={request} 
-                                onUpdateOrderStatus={handleUpdateOrderStatus}/>
+                                onUpdateOrderStatus={handleUpdateOrderStatus}
+                                isPastOrder={false}/>
                 ))}
               </Accordion>
             ) : (
@@ -148,10 +145,11 @@ const SellerPage = () => {
             </Text>
             {pastOrderRequests.length > 0 ? (
               <Accordion allowMultiple width="full" fontSize="lg">
-                {activeOrderRequests.map((request) => (
+                {pastOrderRequests.map((request) => (
                   <SellerRequest key={request.id} 
                                 order={request} 
-                                onUpdateOrderStatus={handleUpdateOrderStatus}/>
+                                onUpdateOrderStatus={handleUpdateOrderStatus}
+                                isPastOrder={true}/>
                 ))}
               </Accordion>
             ) : (
@@ -164,74 +162,3 @@ const SellerPage = () => {
   };
   
 export default SellerPage;
-
-// const mock_order_data = [{
-  //   id: 1,
-  //   title: 'Order #001',
-  //   status: "Pending",
-  //   uid: 2,
-  //   restaurantId: 3,
-  //   address: "",
-  //   paymentInfo: "",
-  //   totalPrice: 12.45,
-  //   comments: "",
-  //   items: [
-  //     {
-  //       itemId: 1,
-  //       itemName: "Margharita Pizza",
-  //       itemQuantity: 1,
-  //       itemCost: 12.45,
-  //       itemComments: ""
-  //     },
-  //   ]
-  // },
-  // {
-  //   id: 2,
-  //   title: 'Order #002',
-  //   status: "Pending",
-  //   restaurantName: "Vista Grande",
-  //   customerName: 'John B',
-  //   totalPrice: 14.54,
-  //   comments: "",
-  //   items: [
-  //     {
-  //       itemId: 1,
-  //       itemName: "Orange Chicken w/ Rice",
-  //       itemQuantity: 1,
-  //       itemCost: 10.00,
-  //       itemComments: ""
-  //     },
-  //     {
-  //       itemId: 2,
-  //       itemName: "Tiramisu",
-  //       itemQuantity: 1,
-  //       itemCost: 4.54,
-  //       itemComments: "extra care"
-  //     }
-  //   ]
-  // },
-  // {
-  //   id: 3,
-  //   title: 'Order #003',
-  //   status: "Pending",
-  //   restaurantName: "Campus Market",
-  //   customerName: 'Alexius Buntaran',
-  //   totalPrice: 9.95,
-  //   comments: "bring a fork and napkin",
-  //   items: [
-  //     {
-  //       itemId: 1,
-  //       itemName: "Chicken Tenders w/ Fries",
-  //       itemQuantity: 1,
-  //       itemCost: 9.95,
-  //       itemComments: ""
-  //     },
-  //     {
-  //       itemId: 2,
-  //       itemName: "Ranch",
-  //       itemQuantity: 2,
-  //       itemCost: 0.00,
-  //       itemComments: ""
-  //     }
-  //   ]
-  // }]
