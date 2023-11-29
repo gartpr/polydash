@@ -4,6 +4,7 @@
         "es2021": true
     },
     "extends": [
+        "react-app",
         "standard",
         "plugin:react/recommended"
     ],

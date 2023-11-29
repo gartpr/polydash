@@ -2,10 +2,35 @@ import React, {useState, useEffect} from 'react';
 import { VStack, Flex, Text, Box, Accordion, Button}  from '@chakra-ui/react';
 import SellerRequest from '../Components/SellerRequest';
 import {db} from "../firebase-config"
-import { collection, getDocs } from "firebase/firestore"
+import { collection, getDocs,onSnapshot } from "firebase/firestore"
+
 
 const SellerPage = () => {
+
+    const [orderRequests, setOrderRequests] = useState([]);
+    const orderCollectionRef = collection(db, "orders");
+
+    useEffect(() => {
+      const unsubscribe = onSnapshot(orderCollectionRef, async (querySnapshot) => {
+        const orderRequestsData = [];
+  
+        for (const doc of querySnapshot.docs) {
+          const orderData = doc.data();
+  
+          const itemsCollectionRef = collection(orderCollectionRef, doc.id, 'items');
+          const itemsSnapshot = await getDocs(itemsCollectionRef);
+          const itemsData = itemsSnapshot.docs.map((itemDoc) => itemDoc.data());
+  
+          orderRequestsData.push({ ...orderData, items: itemsData, id: doc.id });
+        }
+  
+        setOrderRequests(orderRequestsData);
+      });
+    }, [db]);
+  
     const [pastOrderRequests, setPastOrderRequests] = useState([]);
+
+    /**
     const [orderRequests, setOrderRequests] = useState([{
       id: 1,
       title: 'Order #001',
@@ -74,6 +99,7 @@ const SellerPage = () => {
         }
       ]
     }]);
+     */
     // const orderCollectionRef = collection(db,"orders")
     // useEffect(() => {
     //   const getOrders = async() => {
@@ -119,6 +145,7 @@ const SellerPage = () => {
               Active Order Requests
             </Text>
             <Accordion allowMultiple width="full" fontSize="lg">
+            
               {orderRequests.map((request) => (
                 <SellerRequest key={request.id} 
                                order={request} 

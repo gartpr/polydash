@@ -29,7 +29,7 @@ const SellerRequest = ({ order, onDenyOrder, onApproveOrder, isPastOrder }) => {
         <Text mt={2}>Total Price: ${order.totalPrice}</Text>
         <Accordion allowMultiple width="full" fontSize="lg">
           {order.items.map((item) => (
-            <SellerRequestItem key={item.itemId} item={item} />
+            <SellerRequestItem key={item.itemName} item={item} />
           ))}
         </Accordion>
         {!isPastOrder && (
