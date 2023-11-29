@@ -40,7 +40,7 @@ const OrderForm = () => {
         address: address,
         paymentInfo: paymentInfo,
         comments: comments,
-        total: cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2),
+        totalPrice: cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2),
         status: "Pending"
       });
       const itemsCollectioNRef = collection(orderDocRef,'items');
@@ -63,8 +63,8 @@ const OrderForm = () => {
         </Text>
         {cartItems.map((item) => (
           <HStack key={item.id} justifyContent="space-between" w="100%">
-            <Text>{item.name}</Text>
-            <Text>${item.price.toFixed(2)}</Text>
+            <Text>{item.itemName}</Text>
+            <Text>${item.itemCost.toFixed(2)}</Text>
             <Button
               colorScheme="red"
               size="sm"

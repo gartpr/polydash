@@ -14,7 +14,7 @@ const SellerRequestItem = ({ item }) => {
       <h2>
         <AccordionButton>
           <Box flex="1" textAlign="left">
-            <Text mt={2} fontWeight="semibold">Item #{item.itemId}</Text>
+            <Text mt={2} fontWeight="semibold">{item.itemName}</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
