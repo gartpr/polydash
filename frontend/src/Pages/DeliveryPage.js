@@ -14,7 +14,7 @@ const DeliveryPage = () => {
     const getOrderRequests = async () => {
       const data = await getDocs(orderCollectionRef);
       const pendingOrders = data.docs
-        .filter((doc) => doc.data().status === 'Pickup')
+        .filter((doc) => doc.data().status === 'Out for Delivery')
         .map((doc) => ({ ...doc.data(), id: doc.id }));
 
       setOrderRequests(pendingOrders);
