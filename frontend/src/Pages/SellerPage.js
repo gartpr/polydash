@@ -14,16 +14,17 @@ const SellerPage = () => {
       const unsubscribe = onSnapshot(orderCollectionRef, async (querySnapshot) => {
         const orderRequestsData = [];
   
-        for (const doc of querySnapshot.docs) {
-          const orderData = doc.data();
-  
-          const itemsCollectionRef = collection(orderCollectionRef, doc.id, 'items');
-          const itemsSnapshot = await getDocs(itemsCollectionRef);
-          const itemsData = itemsSnapshot.docs.map((itemDoc) => itemDoc.data());
-  
-          orderRequestsData.push({ ...orderData, items: itemsData, id: doc.id });
-        }
-  
+          for (const doc of querySnapshot.docs) {
+            
+            const orderData = doc.data();
+            if (orderData.status === "Pending") {
+              const itemsCollectionRef = collection(orderCollectionRef, doc.id, 'items');
+              const itemsSnapshot = await getDocs(itemsCollectionRef);
+              const itemsData = itemsSnapshot.docs.map((itemDoc) => itemDoc.data());
+      
+              orderRequestsData.push({ ...orderData, items: itemsData, id: doc.id });
+            }
+          }
         setOrderRequests(orderRequestsData);
       });
     }, [db]);
