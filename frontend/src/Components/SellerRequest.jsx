@@ -34,7 +34,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
         <Text mt={2}>Additional Comments: {order.comments}</Text>
         <Accordion allowMultiple width="full" fontSize="lg">
           {order.items.map((item, index) => (
-            <SellerRequestItem key={item.itemId} item={item} index={index} />
+            <SellerRequestItem key={item.itemName} item={item} index={index} />
           ))}
         </Accordion>
         {!isPastOrder && (

@@ -3,23 +3,23 @@ import { HStack, Text, Box, Link } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Cart = ({ cartItems, getCartTotal }) => {
-  return (
-    <Link as={RouterLink} to="/order/form">
-        <Box borderWidth="1px" borderRadius="lg" p={2} maxW="300px">
-        <Text fontSize="lg" textAlign="center">Cart Summary</Text>
-        {cartItems.map((item) => (
-            <HStack key={item.id} justifyContent="space-between">
-            <Text>{item.name}</Text>
-            <Text>${item.price.toFixed(2)}</Text>
-            </HStack>
-        ))}
-        <HStack justifyContent="space-between">
-            <Text>Total:</Text>
-            <Text>${getCartTotal()}</Text>
-        </HStack>
-        </Box>
-    </Link>
-  );
+    return (
+        <Link as={RouterLink} to="/order/form">
+            <Box borderWidth="1px" borderRadius="lg" p={2} maxW="300px">
+                <Text fontSize="lg" textAlign="center">Cart Summary</Text>
+                {cartItems.map((item) => (
+                    <HStack key={item.id} justifyContent="space-between">
+                        <Text>{item.itemName}</Text>
+                        <Text>${item.itemCost.toFixed(2)}</Text>
+                    </HStack>
+                ))}
+                <HStack justifyContent="space-between">
+                    <Text>Total:</Text>
+                    <Text>${getCartTotal()}</Text>
+                </HStack>
+            </Box>
+        </Link>
+    );
 };
 
 const CartContext = React.createContext();
@@ -38,7 +38,7 @@ const CartProvider = ({ children }) => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    const addToCart = (item,restaurantId) => {
+    const addToCart = (item, restaurantId) => {
         const itemWithRestaurantId = { ...item, restaurantId: restaurantId };
         setCartItems([...cartItems, itemWithRestaurantId]);
     };
@@ -47,14 +47,14 @@ const CartProvider = ({ children }) => {
         const itemIndex = cartItems.findIndex((item) => item.id === itemId);
 
         if (itemIndex !== -1) {
-        const updatedCart = [...cartItems];
-        updatedCart.splice(itemIndex, 1); 
-        setCartItems(updatedCart);
+            const updatedCart = [...cartItems];
+            updatedCart.splice(itemIndex, 1);
+            setCartItems(updatedCart);
         }
     };
 
     const getCartTotal = () => {
-        return cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2);
+        return cartItems.reduce((acc, item) => acc + item.itemCost, 0).toFixed(2);
     };
 
     const value = {
