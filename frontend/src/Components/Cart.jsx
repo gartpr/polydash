@@ -39,6 +39,12 @@ const CartProvider = ({ children }) => {
     }, [cartItems]);
 
     const addToCart = (item, restaurantId) => {
+        if(cartItems.length >= 1){
+            if(cartItems[0].restaurantId != restaurantId){
+                alert("All your items must be from the same restaurant. Clear your cart to add an item")
+                return
+            }
+        }
         const itemWithRestaurantId = { ...item, restaurantId: restaurantId };
         setCartItems([...cartItems, itemWithRestaurantId]);
     };
