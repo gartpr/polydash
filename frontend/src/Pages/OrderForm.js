@@ -58,23 +58,23 @@ const OrderForm = () => {
   return (
     <Container maxW="container.md">
       <VStack spacing={4} mt={4}>
-        <Text fontSize="2xl" fontWeight="bold">
-          Cart Summary
-        </Text>
-        {cartItems.map((item) => (
-          <HStack key={item.id} justifyContent="space-between" w="100%">
-            <Text>{item.itemName}</Text>
-            <Text>${item.itemCost.toFixed(2)}</Text>
-            <Button
-              colorScheme="red"
-              size="sm"
-              onClick={() => removeFromCart(item.id)}
-            >
-              Remove
-            </Button>
-          </HStack>
-        ))}
-        <Text>Total: ${getCartTotal()}</Text>
+          <Text fontSize="2xl" fontWeight="bold">
+              Cart Summary
+          </Text>
+          {cartItems.map((item) => (
+              <HStack key={item.id} justifyContent="space-between" w="100%">
+                  <Box flex="1">
+                      <Text>{item.itemName} {item.quantity && `(Qty: ${item.quantity})`}</Text>
+                  </Box>
+                  <Text>${(item.itemCost * (item.quantity || 1)).toFixed(2)}</Text>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => removeFromCart(item.id)}
+                  >Remove</Button>
+              </HStack>
+          ))}
+          <Text>Total: ${getCartTotal()}</Text>
       </VStack>
 
       <Box mt={4}>
