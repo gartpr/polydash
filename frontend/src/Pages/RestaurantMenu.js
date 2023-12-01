@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from "../firebase-config"
-import { collection, getDocs, onSnapshot } from "firebase/firestore"
+import { collection, getDoc, onSnapshot, doc } from "firebase/firestore"
 import {
   Container,
   Text,
@@ -13,7 +13,24 @@ import {
 import { useParams } from 'react-router-dom';
 import { useCart, Cart } from '../Components/Cart';
 
+async function getRestaurantName(restaurantId) {
+  try {
+    const restaurantRef = doc(db, 'restaurants', restaurantId);
+    const restaurantDoc = await getDoc(restaurantRef);
+
+    if (restaurantDoc.exists()) {
+      return restaurantDoc.data().name;
+    } else {
+      console.log('Restaurant not found');
+    }
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error.message);
+  }
+}
+
 const RestaurantMenu = () => {
+  
+  const [restaurantName, setRestaurantName] = useState('');
   const { restaurantId } = useParams();
   const { cartItems, addToCart, getCartTotal } = useCart();
 
@@ -25,15 +42,20 @@ const RestaurantMenu = () => {
       const data = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setmenuItems(data);
       console.log(data)
-
     });
+    const fetchRestaurantName = async () => {
+      const name = await getRestaurantName(restaurantId);
+      setRestaurantName(name);
+    };
 
+    fetchRestaurantName();
 
   }, [db]);
 
   // Mock data for the restaurant and its menu items
-  const restaurantName = 'Sample Restaurant';
+  //const restaurantName = 'Sample Restaurant';
 
+  
   return (
 
     <Container maxW="container.lg">
