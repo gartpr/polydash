@@ -99,7 +99,7 @@ function RegisterAndLogin() {
       signInWithEmailAndPassword(database, email, password)
         .then((data) => {
           console.log(data, 'authData');
-          //history('../');
+          history('../');
         })
         .catch((err) => {
           alert(err.code);
