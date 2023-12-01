@@ -64,7 +64,9 @@ function RegisterAndLogin() {
         name: name,
       });
       console.log("Document added with ID:", userDocRef.id);
-      history('/userinfo')
+      console.log(userId)
+      handleSuccessfulLogin(userId)
+      //history('/userinfo', { userId: userId })
     } else {
       console.log("Document with the same email already exists");
       history('../')
@@ -72,6 +74,17 @@ function RegisterAndLogin() {
   } catch (error) {
     console.error("Error adding document:", error);
     }
+  };
+
+  const handleNavigation = (userId) => {
+    history(`/userinfo/${userId}`);
+  };
+  
+  const handleSuccessfulLogin = (userId) => {
+    // ... Perform login logic
+
+    // Navigate to UserInformation with userId
+    handleNavigation(userId);
   };
 
   const handleSubmit = async (e, type) => {
@@ -89,7 +102,9 @@ function RegisterAndLogin() {
           // Update user data in the database
           updateUserDatabase(userId, e.target.name.value, email);
 
-          history('/userinfo');
+          console.log(userId)
+          handleSuccessfulLogin(userId);
+          //history('/userinfo', { userId: userId});
         })
         .catch((err) => {
           alert(err.code);

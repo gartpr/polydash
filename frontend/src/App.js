@@ -24,7 +24,7 @@ function App() {
         <Route path="/order/tracking/:orderId" element={<OrderTracking />} />
         <Route path="/signin" element={<RegisterAndLogin />} />
         <Route path="/reset" element={<ForgotPassword />} />
-        <Route path="/userinfo" element={<UserInformation />} />
+        <Route path="/userinfo/:userId" element={<UserInformation />} />
       </Routes>
     </div>
   );
