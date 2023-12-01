@@ -6,7 +6,7 @@ import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, where, query, getDocs } from 'firebase/firestore';
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(true);
@@ -20,13 +20,15 @@ function RegisterAndLogin() {
     e.preventDefault();
     const provider = new GoogleAuthProvider();
     try {
+      console.log('Before signInWithPopup:', db);
       const result = await signInWithPopup(database, provider);
       console.log(result, 'Google Sign-In success');
 
       // Assuming you have a function to add/update user data
+      console.log(result.user);
       addUserDocument(result.user);
 
-      history('../');
+      //history('../');
     } catch (error) {
       console.error(error, 'Google Sign-In error');
     }
@@ -41,38 +43,35 @@ function RegisterAndLogin() {
   };
 
   const addUserDocument = (user) => {
-    const userEmail = user.email;
 
     // Assuming you have a function to add/update user data
-    addUserDocumentToFirestore(user);
+    addUserDocumentToFirestore(user.uid, user.displayName, user.email);
   };
 
-  const addUserDocumentToFirestore = (user) => {
-    const usersCollection = db.collection("users");
+  const addUserDocumentToFirestore = async (userId, name, email) => {
+    const usersCollection = collection(db, 'users');
 
-    const userEmail = user.email;
+    const q = query(usersCollection, where("email", "==", email));
 
-    // Check if the user with the same email already exists
-    usersCollection.where("email", "==", userEmail)
-      .get()
-      .then(querySnapshot => {
-        if (querySnapshot.empty) {
-          // User doesn't exist, add a new user document
-          usersCollection.add({
-            email: userEmail,
-            name: user.displayName,
-            // Add more user-specific fields as needed
-          })
-            .then((docRef) => {
-              console.log("Document added with ID:", docRef.id);
-            })
-            .catch(error => {
-              console.error("Error adding document:", error);
-            });
-        } else {
-          console.log("Document with the same email already exists");
-        }
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      // User doesn't exist, add a new user document
+      const userDocRef = doc(usersCollection, userId);
+      await setDoc(userDocRef, {
+        email: email,
+        name: name,
       });
+      console.log("Document added with ID:", userDocRef.id);
+      history('/userinfo')
+    } else {
+      console.log("Document with the same email already exists");
+      history('../')
+    }
+  } catch (error) {
+    console.error("Error adding document:", error);
+    }
   };
 
   const handleSubmit = async (e, type) => {
@@ -80,7 +79,6 @@ function RegisterAndLogin() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const isFirstSignIn = !localStorage.getItem('userSignedIn');
     if (type === 'signup') {
       createUserWithEmailAndPassword(database, email, password)
         .then(async (data) => {
@@ -91,13 +89,7 @@ function RegisterAndLogin() {
           // Update user data in the database
           updateUserDatabase(userId, e.target.name.value, email);
 
-          localStorage.setItem('userSignedIn', 'true');
-
-          if (isFirstSignIn) {
-            history('/UserInformation');
-          } else {
-            history('../');
-          }
+          history('/userinfo');
         })
         .catch((err) => {
           alert(err.code);
@@ -107,11 +99,7 @@ function RegisterAndLogin() {
       signInWithEmailAndPassword(database, email, password)
         .then((data) => {
           console.log(data, 'authData');
-          if (isFirstSignIn) {
-            history('/UserInformation');
-          } else {
-            history('../');
-          }
+          //history('../');
         })
         .catch((err) => {
           alert(err.code);

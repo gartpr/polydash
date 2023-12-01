@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { database } from '../firebase-config';
 import { db } from '../firebase-config';
 import './UserInformation.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
 import { collection, addDoc } from "firebase/firestore"
 
@@ -49,22 +46,6 @@ function UserInformation() {
             console.log("Document with the same email already exists");
           }
         });
-    };
-  
-    const handleGoogleSignIn = async (e) => {
-      e.preventDefault();
-      const provider = new GoogleAuthProvider();
-      try {
-        const result = await signInWithPopup(database, provider);
-        console.log(result, 'Google Sign-In success');
-  
-        // Assuming you have a function to add/update user data
-        addUserDocument(result.user);
-  
-        history('../');
-      } catch (error) {
-        console.error(error, 'Google Sign-In error');
-      }
     };
   
     const handleSubmit = async (e) => {
