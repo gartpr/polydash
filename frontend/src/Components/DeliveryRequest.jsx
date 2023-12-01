@@ -48,7 +48,7 @@ const DeliveryRequest = ({ order }) => {
   useEffect(() => {
     const restaurantId = order.restaurantId; // Replace with the actual restaurant ID
     getRestaurant(restaurantId);
-  }, []);
+  }, [order.restaurantId]);
 
   if (!restaurant) {
     return <div>Loading...</div>;

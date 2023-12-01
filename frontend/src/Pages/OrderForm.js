@@ -46,8 +46,8 @@ const OrderForm = () => {
         address: address,
         paymentInfo: paymentInfo,
         comments: comments,
-        totalPrice: cartItems.reduce((acc, item) => acc + item.itemCost, 0).toFixed(2),
-        deliveryFee: (cartItems.reduce((acc, item) => acc + item.itemCost, 0)/1.2 * 0.2).toFixed(2),
+        totalPrice: cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0).toFixed(2),
+        deliveryFee: (cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0)/1.2 * 0.2).toFixed(2),
         status: "Pending"
       });
       const itemsCollectioNRef = collection(orderDocRef,'items');
@@ -81,6 +81,7 @@ const OrderForm = () => {
                   >Remove</Button>
               </HStack>
           ))}
+          <Text >Delivery Fee: ${((getCartTotal() / 1.2) * 0.2).toFixed(2)}</Text>
           <Text>Total: ${getCartTotal()}</Text>
       </VStack>
 

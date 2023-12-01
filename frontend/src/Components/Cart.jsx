@@ -17,7 +17,7 @@ const Cart = ({ cartItems, getCartTotal }) => {
                     <Text>Delivery Fee</Text>
                     <Text>${(getCartTotal()/1.2 * 0.2).toFixed(2)}</Text> 
                 </HStack>
-            <HStack justifyContent="space-between">
+                <HStack justifyContent="space-between">
                     <Text>Total:</Text>
                     <Text>${getCartTotal()}</Text>
                 </HStack>
@@ -44,7 +44,7 @@ const CartProvider = ({ children }) => {
 
     const addToCart = (item, restaurantId) => {
         if(cartItems.length >= 1){
-            if(cartItems[0].restaurantId != restaurantId){
+            if(cartItems[0].restaurantId !== restaurantId){
                 alert("All your items must be from the same restaurant. Clear your cart to add an item")
                 return
             }
@@ -77,7 +77,7 @@ const CartProvider = ({ children }) => {
     };
 
     const getCartTotal = () => {
-        let total = cartItems.reduce((acc, item) => acc + item.itemCost, 0);
+        let total = cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0);
         total += (total * 0.2);
         return total.toFixed(2);
     };
