@@ -9,8 +9,8 @@ const Cart = ({ cartItems, getCartTotal }) => {
                 <Text fontSize="lg" textAlign="center">Cart Summary</Text>
                 {cartItems.map((item) => (
                     <HStack key={item.id} justifyContent="space-between">
-                        <Text>{item.itemName}</Text>
-                        <Text>${item.itemCost.toFixed(2)}</Text>
+                        <Text>{item.itemName} (Qty: {item.quantity})</Text>
+                        <Text>${(item.itemCost * item.quantity).toFixed(2)}</Text>
                     </HStack>
                 ))}
                 <HStack justifyContent="space-between">
@@ -49,8 +49,21 @@ const CartProvider = ({ children }) => {
                 return
             }
         }
-        const itemWithRestaurantId = { ...item, restaurantId: restaurantId };
-        setCartItems([...cartItems, itemWithRestaurantId]);
+      
+        const existingItemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
+        if (existingItemIndex !== -1) {
+            // If item already exists, update its quantity
+            const updatedCart = [...cartItems];
+            updatedCart[existingItemIndex] = {
+                ...updatedCart[existingItemIndex],
+                quantity: updatedCart[existingItemIndex].quantity + 1,
+            };
+            setCartItems(updatedCart);
+        } else {
+            // If item doesn't exist, add it to the cart
+            const itemWithRestaurantId = { ...item, restaurantId: restaurantId, quantity: 1 };
+            setCartItems([...cartItems, itemWithRestaurantId]);
+        }
     };
 
     const removeFromCart = (itemId) => {
