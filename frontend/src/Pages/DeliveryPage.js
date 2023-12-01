@@ -96,6 +96,13 @@ const DeliveryPage = () => {
           )
         );
       };
+  useEffect(() => {
+    const getOrderRequests = async () => {
+      const data = await getDocs(orderCollectionRef);
+      const pendingOrders = data.docs
+        .filter((doc) => doc.data().status === 'Out for Delivery')
+        .map((doc) => ({ ...doc.data(), id: doc.id }));
+    }})
 
     return (
     <Flex direction="column" align="stretch" minH="100vh" pt={8} width="full">

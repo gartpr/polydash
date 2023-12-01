@@ -56,7 +56,7 @@ const DeliveryRequest = ({ order }) => {
       <h2>
         <AccordionButton>
           <Box flex="1" textAlign="left">
-            <Text mt={2} fontWeight="bold">{restaurant.name} ({restaurant.adress}) ----------&gt; {order.address}</Text>
+            <Text mt={2} fontWeight="bold">{restaurant.name} ({restaurant.adress}) {"===>"} {order.address}</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
