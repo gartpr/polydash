@@ -14,6 +14,10 @@ const Cart = ({ cartItems, getCartTotal }) => {
                     </HStack>
                 ))}
                 <HStack justifyContent="space-between">
+                    <Text>Delivery Fee</Text>
+                    <Text>${(getCartTotal()/1.2 * 0.2).toFixed(2)}</Text> 
+                </HStack>
+            <HStack justifyContent="space-between">
                     <Text>Total:</Text>
                     <Text>${getCartTotal()}</Text>
                 </HStack>
@@ -39,8 +43,14 @@ const CartProvider = ({ children }) => {
     }, [cartItems]);
 
     const addToCart = (item, restaurantId) => {
+        if(cartItems.length >= 1){
+            if(cartItems[0].restaurantId != restaurantId){
+                alert("All your items must be from the same restaurant. Clear your cart to add an item")
+                return
+            }
+        }
+      
         const existingItemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
-
         if (existingItemIndex !== -1) {
             // If item already exists, update its quantity
             const updatedCart = [...cartItems];
@@ -67,14 +77,16 @@ const CartProvider = ({ children }) => {
     };
 
     const getCartTotal = () => {
-        return cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0).toFixed(2);
+        let total = cartItems.reduce((acc, item) => acc + item.itemCost, 0);
+        total += (total * 0.2);
+        return total.toFixed(2);
     };
 
     const value = {
         cartItems,
         addToCart,
         removeFromCart,
-        getCartTotal,
+        getCartTotal
     };
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
