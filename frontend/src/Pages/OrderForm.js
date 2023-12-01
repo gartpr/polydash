@@ -10,7 +10,7 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-import { collection, addDoc } from "firebase/firestore"
+import { collection, addDoc,getDoc, updateDoc,doc } from "firebase/firestore"
 import { db } from "../firebase-config"
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../Components/Cart';
@@ -27,6 +27,8 @@ const OrderForm = () => {
   const [comments, setComments] = useState('');
 
   const orderCollectionRef = collection(db,"orders");
+  
+  
   // Function to place an order
   const placeOrder = async () => {
     if(!user){
@@ -55,6 +57,19 @@ const OrderForm = () => {
         await addDoc(itemsCollectioNRef,item);
       }
       console.log('Order document added successfully:', orderDocRef.id);
+      const userRef = doc(db,"users",user.uid);
+      
+      const userDoc = await getDoc(userRef)
+  
+      // Get the current array or create an empty array if it doesn't exist
+      const currentOrders = userDoc.exists() ? userDoc.data().orders || [] : [];
+
+      // Concatenate the new items to the existing array
+      const updatedOrders = currentOrders.concat(orderDocRef.id);
+
+      // Update the user document with the new array of items
+      await updateDoc(userRef, { orders: updatedOrders });
+
       window.location.href = `/order/tracking/1111`;
     } catch (error) {
       console.error('Error adding order document:', error);
