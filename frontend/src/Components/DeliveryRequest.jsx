@@ -13,8 +13,6 @@ import {
 
 import { useAuth } from '../context/AuthContext';
 
-
-
 const DeliveryRequest = ({ order }) => {
 
   const user = useAuth();
@@ -58,7 +56,7 @@ const DeliveryRequest = ({ order }) => {
       <h2>
         <AccordionButton>
           <Box flex="1" textAlign="left">
-            <Text mt={2} fontWeight="bold">{order.title}</Text>
+            <Text mt={2} fontWeight="bold">{restaurant.name} ({restaurant.adress}) ----------&gt; {order.address}</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
