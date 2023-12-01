@@ -69,7 +69,7 @@ const DeliveryRequest = ({ order }) => {
       <Text fontWeight="bold">{restaurant.adress}</Text>
         <Text fontWeight="bold">{order.customerName}</Text>
         <Text mt={2}>{order.address}</Text>
-        <Text>${order.deliveryFee}</Text>
+        <Text>Your payment: ${order.deliveryFee}</Text>
         <Button onClick={() => acceptDelivery(order.id)}>
           Accept Delivery Request
         </Button>

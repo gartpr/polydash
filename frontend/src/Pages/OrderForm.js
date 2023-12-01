@@ -47,6 +47,7 @@ const OrderForm = () => {
         paymentInfo: paymentInfo,
         comments: comments,
         totalPrice: cartItems.reduce((acc, item) => acc + item.itemCost, 0).toFixed(2),
+        deliveryFee: (cartItems.reduce((acc, item) => acc + item.itemCost, 0)/1.2 * 0.2).toFixed(2),
         status: "Pending"
       });
       const itemsCollectioNRef = collection(orderDocRef,'items');

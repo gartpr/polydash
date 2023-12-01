@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HStack, Text, Box, Link } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
-const Cart = ({ cartItems, getCartTotal }) => {
+const Cart = ({ cartItems, getCartTotal, getDeliveryFee }) => {
     return (
         <Link as={RouterLink} to="/order/form">
             <Box borderWidth="1px" borderRadius="lg" p={2} maxW="300px">
@@ -14,6 +14,10 @@ const Cart = ({ cartItems, getCartTotal }) => {
                     </HStack>
                 ))}
                 <HStack justifyContent="space-between">
+                    <Text>Delivery Fee</Text>
+                    <Text>${(getCartTotal()/1.2 * 0.2).toFixed(2)}</Text> 
+                </HStack>
+            <HStack justifyContent="space-between">
                     <Text>Total:</Text>
                     <Text>${getCartTotal()}</Text>
                 </HStack>
@@ -60,14 +64,16 @@ const CartProvider = ({ children }) => {
     };
 
     const getCartTotal = () => {
-        return cartItems.reduce((acc, item) => acc + item.itemCost, 0).toFixed(2);
+        let total = cartItems.reduce((acc, item) => acc + item.itemCost, 0);
+        total += (total * 0.2);
+        return total.toFixed(2);
     };
 
     const value = {
         cartItems,
         addToCart,
         removeFromCart,
-        getCartTotal,
+        getCartTotal
     };
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
