@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HStack, Text, Box, Link } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
-const Cart = ({ cartItems, getCartTotal, getDeliveryFee }) => {
+const Cart = ({ cartItems, getCartTotal }) => {
     return (
         <Link as={RouterLink} to="/order/form">
             <Box borderWidth="1px" borderRadius="lg" p={2} maxW="300px">
