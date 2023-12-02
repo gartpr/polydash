@@ -17,6 +17,12 @@ function UserInformation() {
         const selectedRole = e.target.role.value;
         const enteredPhoneNumber = e.target.phoneNumber.value;
 
+        // Check if both role and phone number are filled
+        if (!selectedRole || !enteredPhoneNumber) {
+        // Display an error or prevent form submission
+        return;
+      }
+
         // Update the state with the values
         setRole(selectedRole);
         setPhoneNumber(enteredPhoneNumber);
@@ -39,7 +45,7 @@ function UserInformation() {
             <form onSubmit={handleSubmit}>
                 <h1>User Information</h1>
                 <div className="select-box">
-                    <select name="role" defaultValue="">
+                    <select name="role" defaultValue="" required>
                         <option value="" disabled>
                             Select Role
                         </option>
@@ -48,7 +54,14 @@ function UserInformation() {
                         <option value="restaurant">Restaurant</option>
                     </select>
                 </div>
-                <input type="tel" name="phoneNumber" placeholder="Phone Number" />
+                <input
+                    type="number"
+                    name="phoneNumber"
+                    maxLength="10"
+                    placeholder="Phone Number"
+                    title="Please enter a 10-digit phone number"
+                    required
+                />
                 <button type="submit">Submit</button>
             </form>
         </div>
