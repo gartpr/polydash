@@ -124,7 +124,5 @@ select {
 .select-box,
 input[type="tel"],
 button {
-  margin-top: 15px; /* Add margin above select box, phone number, and button */
+  margin-top: 15px;
 }
-
-/* Add any additional styles as needed */

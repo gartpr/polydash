@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database, db } from '../firebase-config'; // Assuming you have 'firestore' in your 'firebase-config'
+import { database, db } from '../firebase-config';
 import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
@@ -24,11 +24,8 @@ function RegisterAndLogin() {
       const result = await signInWithPopup(database, provider);
       console.log(result, 'Google Sign-In success');
 
-      // Assuming you have a function to add/update user data
-      console.log(result.user);
       addUserDocument(result.user);
 
-      //history('../');
     } catch (error) {
       console.error(error, 'Google Sign-In error');
     }
@@ -43,8 +40,6 @@ function RegisterAndLogin() {
   };
 
   const addUserDocument = (user) => {
-
-    // Assuming you have a function to add/update user data
     addUserDocumentToFirestore(user.uid, user.displayName, user.email);
   };
 
@@ -64,9 +59,7 @@ function RegisterAndLogin() {
         name: name,
       });
       console.log("Document added with ID:", userDocRef.id);
-      console.log(userId)
       handleSuccessfulLogin(userId)
-      //history('/userinfo', { userId: userId })
     } else {
       console.log("Document with the same email already exists");
       history('../')
@@ -81,8 +74,6 @@ function RegisterAndLogin() {
   };
   
   const handleSuccessfulLogin = (userId) => {
-    // ... Perform login logic
-
     // Navigate to UserInformation with userId
     handleNavigation(userId);
   };
@@ -102,9 +93,7 @@ function RegisterAndLogin() {
           // Update user data in the database
           updateUserDatabase(userId, e.target.name.value, email);
 
-          console.log(userId)
           handleSuccessfulLogin(userId);
-          //history('/userinfo', { userId: userId});
         })
         .catch((err) => {
           alert(err.code);
@@ -128,8 +117,6 @@ function RegisterAndLogin() {
   const handleReset = () => {
     history("/reset")
   }
-
-  console.log("Rendering with right panel active:", isRightPanelActive);
 
   return (
     <div className={`RegisterAndLogin ${isRightPanelActive ? 'right-panel-active' : ''}`}>

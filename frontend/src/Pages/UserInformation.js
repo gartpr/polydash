@@ -13,7 +13,6 @@ function UserInformation() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Get the values from the form
         const selectedRole = e.target.role.value;
         const enteredPhoneNumber = e.target.phoneNumber.value;
 
@@ -23,11 +22,9 @@ function UserInformation() {
         return;
       }
 
-        // Update the state with the values
         setRole(selectedRole);
         setPhoneNumber(enteredPhoneNumber);
 
-        // Firebase collections
         const userCollectionRef = collection(db, 'users');
 
         // Update user data in the users collection
