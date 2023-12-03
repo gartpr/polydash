@@ -18,7 +18,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
       <h2>
         <AccordionButton>
           <Box flex="1" textAlign="left">
-            <Text as='i' mt={2} fontWeight="semibold">{order.title} - Status: {order.status}</Text>
+            <Text as='i' mt={2} fontWeight="semibold">Order #{order.number} - Status: {order.status}</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
@@ -26,8 +26,8 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
       <AccordionPanel pb={4}>
       <Text fontWeight="bold">Order Information:</Text>
         <Text mt= {2}>Restaurant Name: {order.restaurant.name}</Text> 
-        <Text mt= {2}>Customer Name: {order.user.name}</Text>
-        <Text mt= {2}>Customer Email: {order.user.email}</Text>
+        <Text mt= {2}>Customer Name: {order.customerName}</Text>
+        <Text mt= {2}>Customer Email: {order.email}</Text>
         <Text mt= {2}>Delivery Address: {order.address}</Text>
         <Text mt= {2}>Payment Method: {order.paymentInfo}</Text>
         <Text mt={2}>Total Price: ${order.totalPrice}</Text>
@@ -45,7 +45,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
                 <option value="Received">Received</option>
                 <option value="Confirmed">Confirmed</option>
                 <option value="Preparing">Preparing</option>
-                <option value="Out for Delivery">Out for Delivery</option>
+                <option value="Ready">Ready</option>
                 <option value="Cancelled">Cancelled</option>
               </Select>
             </Box>

@@ -1,164 +1,216 @@
-import React, {useState, useEffect} from 'react';
-import { VStack, Flex, Text, Box, Accordion}  from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { VStack, Flex, Text, Box, Accordion, Select } from '@chakra-ui/react';
 import SellerRequest from '../Components/SellerRequest';
-import {db} from "../firebase-config"
-import { collection, getDocs, getDoc, updateDoc, doc, onSnapshot } from "firebase/firestore"
+import SellerSearchBar from '../Components/SellerSearchBar';
+import { db } from "../firebase-config";
+import { collection, getDocs, getDoc, updateDoc, doc, onSnapshot } from "firebase/firestore";
 
 const SellerPage = () => {
-    const [orderRequests, setOrderRequests] = useState([]);
-    const [pastOrderRequests, setPastOrderRequests] = useState([]);
-    const [activeOrderRequests, setActiveOrderRequests] = useState([]);
-    const [newOrderRequests, setNewOrderRequests] = useState([]);
-    
-    useEffect(() => {
-      const unsubscribeFromOrders = onSnapshot(collection(db, "orders"), (ordersSnapshot) => {
-        const fetchOrders = async () => {
-          const ordersWithDetails = await Promise.all(ordersSnapshot.docs.map(async (orderDoc) => {
-            const orderData = orderDoc.data();
+  const [orderRequests, setOrderRequests] = useState([]);
+  const [pastOrderRequests, setPastOrderRequests] = useState([]);
+  const [activeOrderRequests, setActiveOrderRequests] = useState([]);
+  const [newOrderRequests, setNewOrderRequests] = useState([]);
+  const [selectedSection, setSelectedSection] = useState("new");
 
-            // Fetch items for the order
-            const itemsSnapshot = await getDocs(collection(db, "orders", orderDoc.id, "items"));
-            const items = itemsSnapshot.docs.map((itemDoc) => ({
-              ...itemDoc.data(),
-              itemId: itemDoc.id,
-            }));
-            // Fetch the restaurant details
-            let restaurantData = null;
-            if (orderData.restaurantId) {
-              const restaurantRef = doc(db, "restaurants", orderData.restaurantId);
-              const restaurantSnapshot = await getDoc(restaurantRef);
-              restaurantData = restaurantSnapshot.exists() ? restaurantSnapshot.data() : null;
-            }
-  
-            let userData = null;
-            if (orderData.uid) {
-              const userRef = doc(db, "users", orderData.uid);
-              const userSnapshot = await getDoc(userRef);
-              userData = userSnapshot.exists() ? userSnapshot.data() : null;
-            }
-
-            // Immediately update the status in Firestore if it's "Not Received Yet"
-            if (orderData.status === "Not Received Yet") {
-              await updateOrderStatus(orderDoc.id, "Received");
-              orderData.status = "Received"; // Reflect the updated status
-            }
-
-            return {
-              ...orderData,
-              id: orderDoc.id,
-              items,
-              user: userData,
-              restaurant: restaurantData,
-            };
+  useEffect(() => {
+    const unsubscribeFromOrders = onSnapshot(collection(db, "orders"), (ordersSnapshot) => {
+      const fetchOrders = async () => {
+        const ordersWithDetails = await Promise.all(ordersSnapshot.docs.map(async (orderDoc) => {
+          const orderData = orderDoc.data();
+          const itemsSnapshot = await getDocs(collection(db, "orders", orderDoc.id, "items"));
+          const items = itemsSnapshot.docs.map((itemDoc) => ({
+            ...itemDoc.data(),
+            itemId: itemDoc.id,
           }));
+          let restaurantData = null;
+          if (orderData.restaurantId) {
+            const restaurantRef = doc(db, "restaurants", orderData.restaurantId);
+            const restaurantSnapshot = await getDoc(restaurantRef);
+            restaurantData = restaurantSnapshot.exists() ? restaurantSnapshot.data() : null;
+          }
 
-          setOrderRequests(ordersWithDetails);
-        };
+          if (orderData.status === "Not Received Yet") {
+            await updateOrderStatus(orderDoc.id, "Received");
+            orderData.status = "Received";
+          }
 
-        fetchOrders().catch(console.error);
-      });
+          return {
+            ...orderData,
+            id: orderDoc.id,
+            items,
+            restaurant: restaurantData,
+          };
+        }));
 
-      // Return the unsubscribe function provided by onSnapshot
-      return unsubscribeFromOrders;
-    }, []);
+        setOrderRequests(ordersWithDetails);
+      };
 
-    useEffect(() => {
-      const newOrders = [];
-      const activeOrders = [];
-      const pastOrders = [];
+      fetchOrders().catch(console.error);
+    });
 
-      orderRequests.forEach((order) => {
-        if (order.status === 'Received') {
-          newOrders.push(order);
-        } else if (order.status === 'Out for Delivery' || order.status === 'Cancelled') {
-          pastOrders.push(order);
-        } else {
-          activeOrders.push(order);
-        }
-      });
+    return unsubscribeFromOrders;
+  }, []);
 
-      setNewOrderRequests(newOrders);
-      setActiveOrderRequests(activeOrders);
-      setPastOrderRequests(pastOrders);
-    }, [orderRequests]);
-    
-    const updateOrderStatus = async (orderId, newStatus) => {
-      const orderRef = doc(db, "orders", orderId);
-      await updateDoc(orderRef, {
-        status: newStatus,
-      });
-      return { id: orderId, status: newStatus };
+  useEffect(() => {
+    const newOrders = [];
+    const activeOrders = [];
+    const pastOrders = [];
+
+    orderRequests.forEach((order) => {
+      if (order.status === 'Received') {
+        newOrders.push(order);
+      } else if (order.status === 'Ready' || order.status === 'Cancelled') {
+        pastOrders.push(order);
+      } else {
+        activeOrders.push(order);
+      }
+    });
+
+    setNewOrderRequests(newOrders);
+    setActiveOrderRequests(activeOrders);
+    setPastOrderRequests(pastOrders);
+  }, [orderRequests]);
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    const orderRef = doc(db, "orders", orderId);
+    await updateDoc(orderRef, {
+      status: newStatus,
+    });
+    return { id: orderId, status: newStatus };
+  };
+
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    const updatedOrder = await updateOrderStatus(orderId, newStatus);
+    setOrderRequests((currentOrders) =>
+      currentOrders.map((order) =>
+        order.id === orderId ? { ...order, ...updatedOrder } : order
+      )
+    );
+  };
+
+  const handleSearchOrders = (filters) => {
+    const filteredOrders = orderRequests.filter((order) => {
+      // Check if the order number or user name contains the search query
+      const queryMatch =
+        (String(order.number)).includes(filters.query) ||
+        (order.customerName.toLowerCase().includes(filters.query.toLowerCase()));
+
+      // Check if the order status matches the selected status
+      const statusMatch =
+        filters.status === "" || order.status === filters.status;
+
+      // Check if the order price is within the selected price range
+      const priceRange = getPriceRange(filters.priceRange);
+      console.log(priceRange);
+      console.log(filters.priceRange);
+      const priceRangeMatch =
+        priceRange === "" ||
+        (order.totalPrice >= priceRange.min &&
+          order.totalPrice <= priceRange.max);
+
+      return queryMatch && statusMatch && priceRangeMatch;
+    });
+
+    switch(selectedSection) {
+      case 'new':
+        setNewOrderRequests(filteredOrders);
+        break;
+      case 'active':
+        setActiveOrderRequests(filteredOrders);
+        break;
+      default:
+        setPastOrderRequests(filteredOrders)
+    }
+  };
+
+    // Helper function to get the price range as an object
+    function getPriceRange(selectedPriceRange) {
+      switch (selectedPriceRange) {
+        case "$1-$5":
+          return {min: 1, max: 5};
+        case "$5-$15":
+          console.log("good");
+          return {min: 5, max: 15};
+        case "$15-$25":
+          return {min: 15, max: 52};
+        case "$25+":
+          return {min: 25, max: Infinity};
+        default:
+          return {min: 0, max: Infinity}; // Handle no price range selected
+      }
     };
 
-    const handleUpdateOrderStatus = async (orderId, newStatus) => {
-      const updatedOrder = await updateOrderStatus(orderId, newStatus);
-      setOrderRequests((currentOrders) =>
-        currentOrders.map((order) =>
-          order.id === orderId ? { ...order, ...updatedOrder } : order
-        )
-      );
-    };
+  const handleSectionChange = (section) => {
+    setSelectedSection(section);
+  };
 
-    return (
+  return (
     <Flex direction="column" align="stretch" minH="100vh" pt={8} width="full">
       <VStack spacing={6} align="stretch" maxWidth="container.xl" mx="auto" width="full">
         <Text as='u' fontSize="4xl" fontWeight="bold" color="#154734">
           Restaurants
         </Text>
+        <Select
+          value={selectedSection}
+          onChange={(e) => handleSectionChange(e.target.value)}
+          width="fit-content"
+          ml="auto"
+          mb={4}
+        >
+          <option value="new">New Order Requests</option>
+          <option value="active">Active Order Requests</option>
+          <option value="past">Past Order Requests</option>
+        </Select>
+        <SellerSearchBar onSearch={handleSearchOrders} />
         <Box>
-            <Text fontSize="3xl" fontWeight="bold" color="#3A913F">
-              New Order Requests
-            </Text>
-            {newOrderRequests.length > 0 ? (
-              <Accordion allowMultiple width="full" fontSize="lg">
-                {newOrderRequests.map((request) => (
-                  <SellerRequest key={request.id} 
-                                order={request} 
-                                onUpdateOrderStatus={handleUpdateOrderStatus}
-                                isPastOrder={false}/>
-                ))}
-              </Accordion>
-            ) : (
-              <Text ml={2}> No New Orders. </Text>
-            )}
-        </Box>
-        <Box>
-            <Text fontSize="3xl" fontWeight="bold" color="#3A913F">
-              Active Order Requests
-            </Text>
-            {activeOrderRequests.length > 0 ? (
-              <Accordion allowMultiple width="full" fontSize="lg">
-                {activeOrderRequests.map((request) => (
-                  <SellerRequest key={request.id} 
-                                order={request} 
-                                onUpdateOrderStatus={handleUpdateOrderStatus}
-                                isPastOrder={false}/>
-                ))}
-              </Accordion>
-            ) : (
-              <Text ml={2}> No Active Orders. </Text>
-            )}
-        </Box>
-        <Box>
-            <Text fontSize="3xl" fontWeight="bold" color="#3A913F">
-              Past Order Requests
-            </Text>
-            {pastOrderRequests.length > 0 ? (
-              <Accordion allowMultiple width="full" fontSize="lg">
-                {pastOrderRequests.map((request) => (
-                  <SellerRequest key={request.id} 
-                                order={request} 
-                                onUpdateOrderStatus={handleUpdateOrderStatus}
-                                isPastOrder={true}/>
-                ))}
-              </Accordion>
-            ) : (
-              <Text ml={2}> No Past Orders. </Text>
-            )}
+          <Text fontSize="3xl" fontWeight="bold" color="#3A913F">
+            {selectedSection === 'new'
+              ? "New Order Requests"
+              : selectedSection === 'active'
+              ? "Active Order Requests"
+              : "Past Order Requests"
+            }
+          </Text>
+          {selectedSection === 'new' && newOrderRequests.length > 0 ? (
+            <Accordion allowMultiple width="full" fontSize="lg">
+              {newOrderRequests.map((request) => (
+                <SellerRequest
+                  key={request.id}
+                  order={request}
+                  onUpdateOrderStatus={handleUpdateOrderStatus}
+                  isPastOrder={false}
+                />
+              ))}
+            </Accordion>
+          ) : selectedSection === 'active' && activeOrderRequests.length > 0 ? (
+            <Accordion allowMultiple width="full" fontSize="lg">
+              {activeOrderRequests.map((request) => (
+                <SellerRequest
+                  key={request.id}
+                  order={request}
+                  onUpdateOrderStatus={handleUpdateOrderStatus}
+                  isPastOrder={false}
+                />
+              ))}
+            </Accordion>
+          ) : selectedSection === 'past' && pastOrderRequests.length > 0 ? (
+            <Accordion allowMultiple width="full" fontSize="lg">
+              {pastOrderRequests.map((request) => (
+                <SellerRequest
+                  key={request.id}
+                  order={request}
+                  onUpdateOrderStatus={handleUpdateOrderStatus}
+                  isPastOrder={true}
+                />
+              ))}
+            </Accordion>
+          ) : (
+            <Text ml={2}> No {selectedSection === 'new' ? "New" : selectedSection === 'active' ? "Active" : "Past"} Orders. </Text>
+          )}
         </Box>
       </VStack>
     </Flex>
-    );
-  };
-  
+  );
+};
+
 export default SellerPage;
