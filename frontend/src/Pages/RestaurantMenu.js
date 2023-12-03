@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from "../firebase-config"
-import { collection, getDocs, onSnapshot } from "firebase/firestore"
+import { collection, onSnapshot } from "firebase/firestore"
 import {
   Container,
   Text,
@@ -25,11 +25,8 @@ const RestaurantMenu = () => {
       const data = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setmenuItems(data);
       console.log(data)
-
     });
-
-
-  }, [db]);
+  }, [menuCollectionRef]);
 
   // Mock data for the restaurant and its menu items
   const restaurantName = 'Sample Restaurant';
