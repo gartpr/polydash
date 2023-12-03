@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Input, Select, Flex, Button } from '@chakra-ui/react';
 
-const SellerSearchBar = ({ onSearch, orders, status }) => {
+const SellerSearchBar = ({ onSearch, onClear, selectedSection }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPriceRange, setSelectedPriceRange] = useState('');
@@ -14,8 +14,8 @@ const SellerSearchBar = ({ onSearch, orders, status }) => {
       priceRange: selectedPriceRange,
     };
   
-    // Pass the filters and the status to the parent component for filtering orders
-    onSearch(filters, status);
+    // Pass the filters and the selected section to the parent component for filtering orders
+    onSearch(filters, selectedSection);
   };
 
   const handleClearFilter = () => {
@@ -24,23 +24,25 @@ const SellerSearchBar = ({ onSearch, orders, status }) => {
     setSelectedStatus('');
     setSelectedPriceRange('');
 
-    // Pass the original list of orders to show them again
-    onSearch({
-        query: '',
-        status: '',
-        priceRange: '',
-      });
+    // Pass the original list of orders for the selected section to show them again
+    onClear();
   };
+
+  useEffect(() => {
+    // Listen for changes in the selectedSection prop
+    // and clear filters when it changes
+    handleClearFilter();
+  }, [selectedSection]);
 
   return (
     <Box py={4}>
-      <Flex justify="space-between" align="center" px={8}>
-        <Input
+      <Flex justify="space-between" align="center">
+        <Input ml={2}
           placeholder="Search by order number or customer name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <Select
+        <Select ml={2}
           placeholder="Filter by status"
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
@@ -51,7 +53,7 @@ const SellerSearchBar = ({ onSearch, orders, status }) => {
           <option value="Ready">Ready</option>
           <option value="Cancelled">Cancelled</option>
         </Select>
-        <Select
+        <Select ml={2}
           placeholder="Filter by total price"
           value={selectedPriceRange}
           onChange={(e) => setSelectedPriceRange(e.target.value)}

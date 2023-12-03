@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AccordionItem,
   AccordionButton,
@@ -13,6 +13,15 @@ import {
 import SellerRequestItem from './SellerRequestItem';
 
 const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+
+  // Define a unique key for each accordion item
+  const accordionKey = `accordion-${order.id}`;
+
+  // Toggle the accordion open/closed state
+  const toggleAccordion = () => {
+    setIsAccordionOpen(!isAccordionOpen);
+  };
   return (
     <AccordionItem>
       <h2>
@@ -25,7 +34,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
       </h2>
       <AccordionPanel pb={4}>
       <Text fontWeight="bold">Order Information:</Text>
-        <Text mt= {2}>Restaurant Name: {order.restaurant.name}</Text> 
+        <Text mt={2}>Restaurant Name: {order.restaurant ? order.restaurant.name : 'N/A'}</Text>
         <Text mt= {2}>Customer Name: {order.customerName}</Text>
         <Text mt= {2}>Customer Email: {order.email}</Text>
         <Text mt= {2}>Delivery Address: {order.address}</Text>

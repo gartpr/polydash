@@ -41,7 +41,7 @@ const SellerPage = () => {
             restaurant: restaurantData,
           };
         }));
-
+        console.log(ordersWithDetails)
         setOrderRequests(ordersWithDetails);
       };
 
@@ -86,32 +86,71 @@ const SellerPage = () => {
         order.id === orderId ? { ...order, ...updatedOrder } : order
       )
     );
+
+    if (['Confirmed', 'Preparing', 'Ready'].includes(newStatus)) {
+      setNewOrderRequests((currentOrders) =>
+        currentOrders.filter((order) => order.id !== orderId)
+      );
+      setActiveOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
+    }
+  
+    // Check if the order should be moved to 'New Order Requests'
+    if (newStatus === 'Received') {
+      setActiveOrderRequests((currentOrders) =>
+        currentOrders.filter((order) => order.id !== orderId)
+      );
+      setNewOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
+    }
+  
+    // Check if the order should be moved to 'Past Order Requests'
+    if (['Picked Up', 'Cancelled'].includes(newStatus)) {
+      setActiveOrderRequests((currentOrders) =>
+        currentOrders.filter((order) => order.id !== orderId)
+      );
+      setPastOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
+    }
+  
+    // Update the order in pastOrderRequests if the status changes from 'Ready' to 'Picked Up'
+    setPastOrderRequests((currentOrders) =>
+      currentOrders.map((order) =>
+        order.id === orderId ? { ...order, ...updatedOrder } : order
+      )
+    );
   };
 
   const handleSearchOrders = (filters) => {
-    const filteredOrders = orderRequests.filter((order) => {
-      // Check if the order number or user name contains the search query
-      const queryMatch =
-        (String(order.number)).includes(filters.query) ||
-        (order.customerName.toLowerCase().includes(filters.query.toLowerCase()));
-
-      // Check if the order status matches the selected status
-      const statusMatch =
-        filters.status === "" || order.status === filters.status;
-
-      // Check if the order price is within the selected price range
-      const priceRange = getPriceRange(filters.priceRange);
-      console.log(priceRange);
-      console.log(filters.priceRange);
-      const priceRangeMatch =
-        priceRange === "" ||
-        (order.totalPrice >= priceRange.min &&
-          order.totalPrice <= priceRange.max);
-
-      return queryMatch && statusMatch && priceRangeMatch;
-    });
-
-    switch(selectedSection) {
+    let filteredOrders = [];
+    if (selectedSection === 'new') {
+      filteredOrders = newOrderRequests;
+    }
+    else if (selectedSection === 'active') {
+      filteredOrders = activeOrderRequests;
+    }
+    else {
+      filteredOrders = pastOrderRequests;
+    }
+    filteredOrders = filteredOrders
+      .filter((order) => {
+        // Check if the order number or user name contains the search query
+        const queryMatch =
+          (String(order.number)).includes(filters.query) ||
+          (order.customerName.toLowerCase().includes(filters.query.toLowerCase()));
+  
+        // Check if the order status matches the selected status
+        const statusMatch =
+          filters.status === "" || order.status === filters.status;
+  
+        // Check if the order price is within the selected price range
+        const priceRange = getPriceRange(filters.priceRange);
+        const priceRangeMatch =
+          priceRange === "" ||
+          (order.totalPrice >= priceRange.min &&
+            order.totalPrice <= priceRange.max);
+  
+        return queryMatch && statusMatch && priceRangeMatch;
+      });
+  
+    switch (selectedSection) {
       case 'new':
         setNewOrderRequests(filteredOrders);
         break;
@@ -119,7 +158,23 @@ const SellerPage = () => {
         setActiveOrderRequests(filteredOrders);
         break;
       default:
-        setPastOrderRequests(filteredOrders)
+        setPastOrderRequests(filteredOrders);
+    }
+  };
+
+  const handleClearFilters = () => {
+    switch (selectedSection) {
+      case 'new':
+        setNewOrderRequests(orderRequests.filter((order) => order.status === 'Received'));
+        break;
+      case 'active':
+        setActiveOrderRequests(orderRequests.filter((order) => ['Confirmed', 'Preparing', 'Ready'].includes(order.status)));
+        break;
+      case 'past':
+        setPastOrderRequests(orderRequests.filter((order) => ['Picked Up', 'Cancelled'].includes(order.status)));
+        break;
+      default:
+        break;
     }
   };
 
@@ -150,18 +205,6 @@ const SellerPage = () => {
         <Text as='u' fontSize="4xl" fontWeight="bold" color="#154734">
           Restaurants
         </Text>
-        <Select
-          value={selectedSection}
-          onChange={(e) => handleSectionChange(e.target.value)}
-          width="fit-content"
-          ml="auto"
-          mb={4}
-        >
-          <option value="new">New Order Requests</option>
-          <option value="active">Active Order Requests</option>
-          <option value="past">Past Order Requests</option>
-        </Select>
-        <SellerSearchBar onSearch={handleSearchOrders} />
         <Box>
           <Text fontSize="3xl" fontWeight="bold" color="#3A913F">
             {selectedSection === 'new'
@@ -171,6 +214,19 @@ const SellerPage = () => {
               : "Past Order Requests"
             }
           </Text>
+          <Box display="flex" alignItems="center" px={2}>
+            <Text marginRight="1rem">Show:</Text>
+            <Select
+              value={selectedSection}
+              onChange={(e) => handleSectionChange(e.target.value)}
+              width="fit-content"
+            >
+              <option value="new">New Order Requests</option>
+              <option value="active">Active Order Requests</option>
+              <option value="past">Past Order Requests</option>
+            </Select>
+          </Box>
+          <SellerSearchBar onSearch={handleSearchOrders} onClear={handleClearFilters} selectedSection={selectedSection} />
           {selectedSection === 'new' && newOrderRequests.length > 0 ? (
             <Accordion allowMultiple width="full" fontSize="lg">
               {newOrderRequests.map((request) => (
