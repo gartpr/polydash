@@ -40,9 +40,9 @@ const DeliveryPage = () => {
         const pickedUpOrders = [];
         const deliveredOrders = [];
         orderRequests.forEach((order) => {
-            if (order.status === "Accepted") {
+            if (order.status === "Driver Accepted") {
                 acceptedOrders.push(order);
-            } else if (order.status === "Picked Up") {
+            } else if (order.status === "Out for Delivery") {
                 pickedUpOrders.push(order);
             } else if (order.status === "Delivered") {
                 deliveredOrders.push(order);
