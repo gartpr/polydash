@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db } from '../firebase-config';
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import './UserInformation.css';
 
 function UserInformation() {
@@ -9,6 +9,31 @@ function UserInformation() {
     const { userId } = useParams();
     const [role, setRole] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+
+    const fetchUserRole = async (userId) => {
+        const userDocRef = doc(collection(db, 'users'), userId);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()){
+            return userDoc.data().role;
+        }
+
+        return null;
+    }
+
+    const handleRedirection = async (userId) => {
+        const userRole = await fetchUserRole(userId);
+
+        if (userRole === 'customer'){
+            navigate('/order')
+        } else if (userRole === 'driver'){
+            navigate('/delivery')
+        } else if (userRole === 'restaurant'){
+            navigate('/seller')
+        } else {
+            console.error('Unknown user role');
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,7 +59,7 @@ function UserInformation() {
             phoneNumber: enteredPhoneNumber,
         }, { merge: true });
 
-        navigate('../');
+        handleRedirection(userId);
     };
 
     return (
