@@ -59,25 +59,25 @@ const RestaurantMenu = () => {
   return (
 
     <Container maxW="container.lg">
-      <Heading as="h1" size="xl" mt={4}>{restaurantName}</Heading>
-      <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4} mt={4}>
-        {menuItems.map((item) => (
-          <Box key={item.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
-            <Box p="4">
-              <Heading as="h2" size="md"> {item.itemName} </Heading>
-              <Text fontSize="lg">${item.itemCost.toFixed(2)}</Text>
-              <HStack mt={2}>
-                <Button
-                  size="sm"
-                  colorScheme="teal"
-                  onClick={() => addToCart(item, restaurantId)}
-                > Add to Cart </Button>
-              </HStack>
-            </Box>
-          </Box>
-        ))}
-        <Cart cartItems={cartItems} getCartTotal={getCartTotal} />
-      </Grid>
+        <Heading as="h1" size="xl" mt={4}>{restaurantName}</Heading>
+        <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4} mt={4}>
+            {menuItems.map((item) => (
+                <Box key={item.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
+                    <Box p="4">
+                      <Heading as="h2" size="md"> {item.itemName} </Heading>
+                        <Text fontSize="lg">${item.itemCost.toFixed(2)}</Text>
+                        <HStack mt={2}>
+                          <Button
+                            size="sm"
+                            colorScheme="teal"
+                            onClick={() => addToCart(item, restaurantId)}
+                          > Add to Cart </Button>
+                        </HStack>
+                    </Box>
+                </Box>
+            ))}
+            <Cart cartItems={cartItems} getCartTotal={getCartTotal} />
+        </Grid>
     </Container>
   );
 };

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect }, { useState, useEffect } from 'react';
+import { doc, getDoc,updateDoc } from "firebase/firestore"
+import { db } from "../firebase-config"
 import { doc, getDoc,updateDoc } from "firebase/firestore"
 import { db } from "../firebase-config"
 import {
@@ -9,7 +11,12 @@ import {
   Box,
   Text,
   Button
+  Button
 } from '@chakra-ui/react';
+
+import { useAuth } from '../context/AuthContext';
+
+
 
 import { useAuth } from '../context/AuthContext';
 
@@ -63,8 +70,11 @@ const DeliveryRequest = ({ order }) => {
           <AccordionIcon />
         </AccordionButton>
 
+
       </h2>
       <AccordionPanel pb={4}>
+      <Text fontWeight="bold">{restaurant.name}</Text>
+      <Text fontWeight="bold">{restaurant.adress}</Text>
       <Text fontWeight="bold">{restaurant.name}</Text>
       <Text fontWeight="bold">{restaurant.adress}</Text>
         <Text fontWeight="bold">{order.customerName}</Text>
