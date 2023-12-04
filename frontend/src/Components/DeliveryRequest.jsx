@@ -3,7 +3,6 @@ import React, { useState, useEffect }from 'react';
 import { doc, getDoc,updateDoc } from "firebase/firestore"
 import { AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box, Text, Button } from "@chakra-ui/react";
 import { db } from "../firebase-config"
-import { doc, getDoc,updateDoc } from "firebase/firestore"
 import { useAuth } from "../context/AuthContext";
 
 
