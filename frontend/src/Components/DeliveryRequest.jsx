@@ -1,6 +1,4 @@
-import React, { useState, useEffect }, { useState, useEffect } from 'react';
-import { doc, getDoc,updateDoc } from "firebase/firestore"
-import { db } from "../firebase-config"
+import React, { useState, useEffect }from 'react';
 import { doc, getDoc,updateDoc } from "firebase/firestore"
 import { db } from "../firebase-config"
 import {
@@ -11,14 +9,10 @@ import {
   Box,
   Text,
   Button
-  Button
 } from '@chakra-ui/react';
 
 import { useAuth } from '../context/AuthContext';
 
-
-
-import { useAuth } from '../context/AuthContext';
 
 
 
