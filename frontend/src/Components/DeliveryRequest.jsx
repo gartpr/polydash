@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect }from 'react';
-import { doc, getDoc,updateDoc } from "firebase/firestore"
 import { AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box, Text, Button } from "@chakra-ui/react";
 import { db } from "../firebase-config"
+import { doc, getDoc,updateDoc } from "firebase/firestore"
 import { useAuth } from "../context/AuthContext";
 
 
@@ -13,14 +12,14 @@ const DeliveryRequest = ({ order }) => {
     const acceptDelivery = async (orderID) => {
         const orderDocRef = doc(db, "orders", orderID);
         await updateDoc(orderDocRef, {
-            status: "Accepted"
+            status: "Driver Accepted"
         });
     };
 
     const pickedUpDelivery = async (orderID) => {
         const orderDocRef = doc(db, "orders", orderID);
         await updateDoc(orderDocRef, {
-            status: "Picked Up"
+            status: "Out for Delivery"
         });
     };
 
@@ -57,11 +56,11 @@ const DeliveryRequest = ({ order }) => {
 
     const ButtonSelection = (orderStatus) => {
         switch (orderStatus.orderStatus) {
-            case "Accepted":
+            case "Driver Accepted":
                 return <Button colorScheme="green" onClick={() => pickedUpDelivery(order.id)}>
                             Picked Up
                         </Button>
-            case "Picked Up":
+            case "Out for Delivery":
                 return <Button colorScheme="green" onClick={() => deliveredDelivery(order.id)}>
                             Delivered
                         </Button>
