@@ -5,25 +5,25 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "GitHubCICD" ]
+    branches: ['GitHubCICD']
   pull_request:
-    branches: [ "GitHubCICD" ]
+    branches: ['GitHubCICD']
 
 jobs:
   build:
+    runs-on:
+      ubuntu-latest
 
-    runs-on: ubuntu-latest
-
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+      # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 20
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run -w frontend lint
-    - run: npm run -w frontend build
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run -w frontend lint
+      - run: npm run -w frontend build
+      - run: npm test
