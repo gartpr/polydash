@@ -1,27 +1,8 @@
-import React, { useState } from 'react';
-import {
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Accordion,
-  Box,
-  Text,
-  Select,
-  Flex,
-} from '@chakra-ui/react';
+import React from 'react';
+import { AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Accordion, Box, Text, Select, Flex } from '@chakra-ui/react';
 import SellerRequestItem from './SellerRequestItem';
 
 const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-
-  // Define a unique key for each accordion item
-  const accordionKey = `accordion-${order.id}`;
-
-  // Toggle the accordion open/closed state
-  const toggleAccordion = () => {
-    setIsAccordionOpen(!isAccordionOpen);
-  };
   return (
     <AccordionItem>
       <h2>
@@ -42,9 +23,9 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
         <Text mt={2}>Total Price: ${order.totalPrice}</Text>
         <Text mt={2}>Additional Comments: {order.comments}</Text>
         <Accordion allowMultiple width="full" fontSize="lg">
-          {order.items.map((item, index) => (
-            <SellerRequestItem key={item.itemName} item={item} index={index} />
-          ))}
+        {order.items && order.items.map((item, index) => (
+        <SellerRequestItem key={item.itemName} item={item} index={index} />
+      ))}
         </Accordion>
         {!isPastOrder && (
           <Flex justifyContent="space-between" mt={4} alignItems="center">

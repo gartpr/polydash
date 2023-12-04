@@ -6,33 +6,25 @@ const SellerSearchBar = ({ onSearch, onClear, selectedSection }) => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPriceRange, setSelectedPriceRange] = useState('');
 
+  useEffect(() => {
+    handleClearFilter();
+  }, [selectedSection]);
+  
   const handleSearch = () => {
-    // Construct a search filter object based on user input
     const filters = {
       query: searchQuery,
       status: selectedStatus,
       priceRange: selectedPriceRange,
     };
-  
-    // Pass the filters and the selected section to the parent component for filtering orders
     onSearch(filters, selectedSection);
   };
 
   const handleClearFilter = () => {
-    // Clear all filter values and trigger a search with empty filters
     setSearchQuery('');
     setSelectedStatus('');
     setSelectedPriceRange('');
-
-    // Pass the original list of orders for the selected section to show them again
     onClear();
   };
-
-  useEffect(() => {
-    // Listen for changes in the selectedSection prop
-    // and clear filters when it changes
-    handleClearFilter();
-  }, [selectedSection]);
 
   return (
     <Box py={4}>
@@ -58,7 +50,7 @@ const SellerSearchBar = ({ onSearch, onClear, selectedSection }) => {
           value={selectedPriceRange}
           onChange={(e) => setSelectedPriceRange(e.target.value)}
         >
-          <option value="$1-$5">$1 - $5</option>
+          <option value="$0-$5">$0 - $5</option>
           <option value="$5-$15">$5 - $15</option>
           <option value="$15-$25">$15 - $25</option>
           <option value="$25+">$25+</option>

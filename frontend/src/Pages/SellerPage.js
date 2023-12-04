@@ -59,10 +59,10 @@ const SellerPage = () => {
     orderRequests.forEach((order) => {
       if (order.status === 'Received') {
         newOrders.push(order);
-      } else if (order.status === 'Ready' || order.status === 'Cancelled') {
-        pastOrders.push(order);
-      } else {
+      } else if (['Confirmed', 'Preparing', 'Ready'].includes(order.status)) {
         activeOrders.push(order);
+      } else {
+        pastOrders.push(order);
       }
     });
 
@@ -94,7 +94,6 @@ const SellerPage = () => {
       setActiveOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
     }
   
-    // Check if the order should be moved to 'New Order Requests'
     if (newStatus === 'Received') {
       setActiveOrderRequests((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId)
@@ -102,7 +101,6 @@ const SellerPage = () => {
       setNewOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
     }
   
-    // Check if the order should be moved to 'Past Order Requests'
     if (['Picked Up', 'Cancelled'].includes(newStatus)) {
       setActiveOrderRequests((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId)
@@ -110,7 +108,6 @@ const SellerPage = () => {
       setPastOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
     }
   
-    // Update the order in pastOrderRequests if the status changes from 'Ready' to 'Picked Up'
     setPastOrderRequests((currentOrders) =>
       currentOrders.map((order) =>
         order.id === orderId ? { ...order, ...updatedOrder } : order
@@ -131,16 +128,13 @@ const SellerPage = () => {
     }
     filteredOrders = filteredOrders
       .filter((order) => {
-        // Check if the order number or user name contains the search query
         const queryMatch =
           (String(order.number)).includes(filters.query) ||
           (order.customerName.toLowerCase().includes(filters.query.toLowerCase()));
   
-        // Check if the order status matches the selected status
         const statusMatch =
           filters.status === "" || order.status === filters.status;
   
-        // Check if the order price is within the selected price range
         const priceRange = getPriceRange(filters.priceRange);
         const priceRangeMatch =
           priceRange === "" ||
@@ -177,23 +171,21 @@ const SellerPage = () => {
         break;
     }
   };
-
-    // Helper function to get the price range as an object
-    function getPriceRange(selectedPriceRange) {
-      switch (selectedPriceRange) {
-        case "$1-$5":
-          return {min: 1, max: 5};
-        case "$5-$15":
-          console.log("good");
-          return {min: 5, max: 15};
-        case "$15-$25":
-          return {min: 15, max: 52};
-        case "$25+":
-          return {min: 25, max: Infinity};
-        default:
-          return {min: 0, max: Infinity}; // Handle no price range selected
-      }
-    };
+  
+  function getPriceRange(selectedPriceRange) {
+    switch (selectedPriceRange) {
+      case "$0-$5":
+        return {min: 0, max: 5};
+      case "$5-$15":
+        return {min: 5, max: 15};
+      case "$15-$25":
+        return {min: 15, max: 52};
+      case "$25+":
+        return {min: 25, max: Infinity};
+      default:
+        return {min: 0, max: Infinity}; // Handle no price range selected
+    }
+  };
 
   const handleSectionChange = (section) => {
     setSelectedSection(section);
@@ -228,7 +220,7 @@ const SellerPage = () => {
           </Box>
           <SellerSearchBar onSearch={handleSearchOrders} onClear={handleClearFilters} selectedSection={selectedSection} />
           {selectedSection === 'new' && newOrderRequests.length > 0 ? (
-            <Accordion allowMultiple width="full" fontSize="lg">
+            <Accordion key={`accordion-${selectedSection}-${newOrderRequests.map(order => order.id).join("-")}`} allowMultiple width="full" fontSize="lg">
               {newOrderRequests.map((request) => (
                 <SellerRequest
                   key={request.id}
@@ -239,7 +231,7 @@ const SellerPage = () => {
               ))}
             </Accordion>
           ) : selectedSection === 'active' && activeOrderRequests.length > 0 ? (
-            <Accordion allowMultiple width="full" fontSize="lg">
+            <Accordion key={`accordion-${selectedSection}-${newOrderRequests.map(order => order.id).join("-")}`} allowMultiple width="full" fontSize="lg">
               {activeOrderRequests.map((request) => (
                 <SellerRequest
                   key={request.id}
@@ -250,7 +242,7 @@ const SellerPage = () => {
               ))}
             </Accordion>
           ) : selectedSection === 'past' && pastOrderRequests.length > 0 ? (
-            <Accordion allowMultiple width="full" fontSize="lg">
+            <Accordion key={`accordion-${selectedSection}-${newOrderRequests.map(order => order.id).join("-")}`} allowMultiple width="full" fontSize="lg">
               {pastOrderRequests.map((request) => (
                 <SellerRequest
                   key={request.id}
