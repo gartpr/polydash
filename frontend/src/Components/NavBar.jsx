@@ -39,7 +39,7 @@ export default function Navbar() {
   };
 
   return (
-    <Box mb={20}>
+    <Box>
       <Flex
         bg={useColorModeValue('#A4D65E', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}

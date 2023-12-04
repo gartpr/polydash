@@ -120,9 +120,3 @@ select {
   outline: none;
   cursor: pointer;
 }
-
-.select-box,
-input[type="tel"],
-button {
-  margin-top: 15px;
-}
