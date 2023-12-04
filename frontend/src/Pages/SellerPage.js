@@ -223,7 +223,7 @@ const SellerPage = () => {
             <Accordion key={`accordion-${selectedSection}-${newOrderRequests.map(order => order.id).join("-")}`} allowMultiple width="full" fontSize="lg">
               {newOrderRequests.map((request) => (
                 <SellerRequest
-                  key={request.id}
+                  key={`${selectedSection}-${request.id}`}
                   order={request}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   isPastOrder={false}
@@ -234,7 +234,7 @@ const SellerPage = () => {
             <Accordion key={`accordion-${selectedSection}-${newOrderRequests.map(order => order.id).join("-")}`} allowMultiple width="full" fontSize="lg">
               {activeOrderRequests.map((request) => (
                 <SellerRequest
-                  key={request.id}
+                  key={`${selectedSection}-${request.id}`}
                   order={request}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   isPastOrder={false}
@@ -245,7 +245,7 @@ const SellerPage = () => {
             <Accordion key={`accordion-${selectedSection}-${newOrderRequests.map(order => order.id).join("-")}`} allowMultiple width="full" fontSize="lg">
               {pastOrderRequests.map((request) => (
                 <SellerRequest
-                  key={request.id}
+                  key={`${selectedSection}-${request.id}`}
                   order={request}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   isPastOrder={true}

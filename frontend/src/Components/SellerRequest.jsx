@@ -8,7 +8,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
       <h2>
         <AccordionButton>
           <Box flex="1" textAlign="left">
-            <Text as='i' mt={2} fontWeight="semibold">Order #{order.number} - Status: {order.status}</Text>
+            <Text as='i' mt={2} fontWeight="semibold">Order #{order.orderNumber} - Status: {order.status}</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
