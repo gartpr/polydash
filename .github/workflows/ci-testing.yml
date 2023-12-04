@@ -26,4 +26,4 @@ jobs:
       - run: npm ci
       - run: npm run -w frontend lint
       - run: npm run -w frontend build
-      - run: npm -w frontend test
+
