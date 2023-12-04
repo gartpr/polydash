@@ -85,7 +85,6 @@ function UserInformation() {
                     title="Please enter a 10-digit phone number"
                     required
                 />
-                <br></br>
                 <button type="submit">Submit</button>
             </form>
         </div>
