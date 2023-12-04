@@ -9,6 +9,7 @@ import RestaurantMenu from './Pages/RestaurantMenu.js';
 import RegisterAndLogin from './Pages/RegisterAndLogin.js';
 import ForgotPassword from './Pages/ForgotPassword';
 import OrderTrackingPage from './Pages/OrderTracking.js';
+import UserInformation from './Pages/UserInformation';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/order/tracking" element={<OrderTrackingPage />} />
         <Route path="/signin" element={<RegisterAndLogin />} />
         <Route path="/reset" element={<ForgotPassword />} />
+        <Route path="/userinfo/:userId" element={<UserInformation />} />
       </Routes>
     </div>
   );
