@@ -4,8 +4,7 @@
         "es2021": true
     },
     "extends": [
-        "react-app",
-        "standard",
+        "eslint:recommended",
         "plugin:react/recommended"
     ],
     "parserOptions": {
@@ -15,6 +14,10 @@
     "plugins": [
         "react"
     ],
+    "ignorePatterns": [
+        "src/Testing/**/*.js"
+    ],
     "rules": {
+        "react/prop-types": 0
     }
 }
