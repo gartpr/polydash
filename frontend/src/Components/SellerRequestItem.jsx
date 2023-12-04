@@ -20,8 +20,7 @@ const SellerRequestItem = ({ item, index }) => {
         </AccordionButton>
       </h2>
       <AccordionPanel pb={4}>
-        <Text mt= {2}>Name: {item.itemName}</Text> 
-        <Text mt= {2}>Quantity: {item.itemQuantity}</Text>
+        <Text mt= {2}>Quantity: {item.quantity}</Text>
         <Text mt={2}>Cost: ${item.itemCost}</Text>
         <Text mt={2}>Additional Item Comments: {item.itemComments}</Text>
       </AccordionPanel>
