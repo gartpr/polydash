@@ -6,7 +6,7 @@ import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
-import { collection, doc, setDoc, where, query, getDocs } from 'firebase/firestore';
+import { collection, doc, setDoc, where, query, getDocs, getDoc } from 'firebase/firestore';
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(true);
@@ -25,6 +25,7 @@ function RegisterAndLogin() {
       console.log(result, 'Google Sign-In success');
 
       addUserDocument(result.user);
+      handleSuccessfulLogin(result.user.uid);
 
     } catch (error) {
       console.error(error, 'Google Sign-In error');
@@ -59,7 +60,7 @@ function RegisterAndLogin() {
         name: name,
       });
       console.log("Document added with ID:", userDocRef.id);
-      handleSuccessfulLogin(userId)
+      handleNavigation(userId)
     } else {
       console.log("Document with the same email already exists");
       history('../')
@@ -73,9 +74,25 @@ function RegisterAndLogin() {
     history(`/userinfo/${userId}`);
   };
   
-  const handleSuccessfulLogin = (userId) => {
-    // Navigate to UserInformation with userId
-    handleNavigation(userId);
+  const handleSuccessfulLogin = async (userId) => {
+    const userDocRef = doc(collection(db, 'users'), userId);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()){
+      const userRole = userDoc.data().role;
+      if (userRole === 'customer'){
+        history('/order')
+      } else if (userRole === 'driver'){
+          history('/delivery')
+      } else if (userRole === 'restaurant'){
+          history('/seller')
+      } else {
+          console.error('Unknown user role');
+      }
+    } else {
+      console.error('User document not found');
+    }
+    
   };
 
   const handleSubmit = async (e, type) => {
@@ -93,23 +110,22 @@ function RegisterAndLogin() {
           // Update user data in the database
           updateUserDatabase(userId, e.target.name.value, email);
 
-          handleSuccessfulLogin(userId);
+          handleNavigation(userId);
         })
         .catch((err) => {
           alert(err.code);
           setRightPanelActive(true);
         });
-    } else {
+    } else if (type === 'signin') {
       signInWithEmailAndPassword(database, email, password)
         .then((data) => {
           console.log(data, 'authData');
-          history('../');
+          handleSuccessfulLogin(data.user.uid);
         })
         .catch((err) => {
           alert(err.code);
         });
-    }
-    if (type === 'google') {
+    } else if (type === 'google') {
       handleGoogleSignIn();
     }
   };
