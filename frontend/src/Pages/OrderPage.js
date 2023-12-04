@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, Text, Grid, Heading, AspectRatio, Link}  from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import {db} from "../firebase-config"
-import { collection, getDocs } from "firebase/firestore"
+import { collection, getDocs,onSnapshot } from "firebase/firestore"
 import { useCart, Cart } from '../Components/Cart';
 
 /*const cartItems = [
@@ -24,14 +24,15 @@ const OrderPage = () => {
     const [restaurants,setRestaurants] = useState([]);
     const restaurantCollectionRef = collection(db,"restaurants");
 
-        useEffect(() => {
-            const getRestaurants = async() => {
-            const data = await getDocs(restaurantCollectionRef);
-            console.log(data)
-            setRestaurants(data.docs.map((doc) => ({...doc.data(),id:doc.id})));
-            };
-            getRestaurants();
-        }, [restaurantCollectionRef]);
+    
+    useEffect(() => {
+        const unsubscribe = onSnapshot(restaurantCollectionRef, (querySnapshot) => {
+          const data = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+          setRestaurants(data);
+          console.log(data)
+        });
+
+      }, [db]);
 
     return (
         <Container maxW="unset" padding={0}>
