@@ -16,6 +16,8 @@ const OrderBox = ({ order }) => {
     switch (status) {
       case 'Out for delivery':
         return 'green';
+      case 'Delivered':
+        return 'green';
       case 'Cancelled':
         return 'red';
       default:
@@ -40,10 +42,12 @@ const OrderBox = ({ order }) => {
           flex="1"
           hasStripe
           value={order.status === 'Cancelled' ? 100 :
-                 order.status === 'Pending' ? 10 :
-                 order.status === 'Received' ? 20 :
-                 order.status === 'Confirmed' ? 30 :
-                 order.status === 'Preparing' ? 40 :
+                 order.status === 'Not Recieved Yet' ? 0 :
+                 order.status === 'Received' ? 10 :
+                 order.status === 'Confirmed' ? 20 :
+                 order.status === 'Preparing' ? 30 :
+                 order.status === 'Ready' ? 40 :
+                 order.status === 'Driver Accepted' ? 50 :
                  order.status === 'Out for delivery' ? 80 : 
                  order.status === 'Delivered' ? 100 : 0}
           colorScheme={getStatusColor(order.status)}

@@ -28,7 +28,6 @@ const OrderForm = () => {
 
   const orderCollectionRef = collection(db,"orders");
   
-  
   // Function to place an order
   const placeOrder = async () => {
     if(!user){
@@ -40,19 +39,18 @@ const OrderForm = () => {
     // Handle the order placement logic here, e.g., send data to a server
     try {
       const orderDocRef = await addDoc(orderCollectionRef, {
-        title: "Order",
+        orderNumber: "1",
+        status: "Not Recieved Yet",
+        customerName: name,
+        customerEmail: user.email,
+        deliverDriverId: "",
+        deliveryFee: (cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0)/1.2 * 0.2).toFixed(2),
         uid: user.uid,
         restaurantId: restaurantId,
-        customerName: name,
-        customerName: name,
-        email: user.email,
-        address: address,
         address: address,
         paymentInfo: paymentInfo,
-        comments: comments,
         totalPrice: cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0).toFixed(2),
-        deliveryFee: (cartItems.reduce((acc, item) => acc + item.itemCost * item.quantity, 0)/1.2 * 0.2).toFixed(2),
-        status: "Pending"
+        comments: comments
       });
       const itemsCollectioNRef = collection(orderDocRef,'items');
       for( const item of cartItems){
