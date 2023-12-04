@@ -14,7 +14,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
         </AccordionButton>
       </h2>
       <AccordionPanel pb={4}>
-      <Text fontWeight="bold">Order Information:</Text>
+        <Text fontWeight="bold">Order Information:</Text>
         <Text mt={2}>Restaurant Name: {order.restaurant ? order.restaurant.name : 'N/A'}</Text>
         <Text mt= {2}>Customer Name: {order.customerName}</Text>
         <Text mt= {2}>Customer Email: {order.email}</Text>

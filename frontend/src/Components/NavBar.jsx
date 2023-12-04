@@ -6,9 +6,7 @@ import {
   IconButton,
   Button,
   Stack,
-  Popover,
   Link,
-  PopoverTrigger,
   useDisclosure,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -39,7 +37,7 @@ export default function Navbar() {
   };
 
   return (
-    <Box>
+    <Box mb={20}>
       <Flex
         bg={useColorModeValue('#A4D65E', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}
@@ -65,7 +63,7 @@ export default function Navbar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Link as={RouterLink} to='/'>
-            <Image src={logo} width="auto" height="38px"/>
+            <Image src={logo} width="auto" height="38px" />
           </Link>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -83,7 +81,7 @@ export default function Navbar() {
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
-            bg={'#0da955'} // Change the color as needed
+            bg={'#0da955'} 
             onClick={handleClick}
             _hover={{
               bg: '#60e290',
@@ -92,15 +90,13 @@ export default function Navbar() {
             Sign Out
           </Button>
         ) : (
-          <Link to="/signin">
+          <Link as={RouterLink} to="/signin">
             <Button
               display={{ base: 'none', md: 'inline-flex' }}
-              as={'a'}
               fontSize={'sm'}
               fontWeight={600}
               color={'white'}
               bg={'#0da955'}
-              href={'/signin'}
               _hover={{
                 bg: '#60e290',
               }}
@@ -123,14 +119,15 @@ const DesktopNav = () => {
     { label: 'Home', href: "/" },
     { label: 'Orders', href: "/order" },
     { label: 'Drivers', href: '/delivery' },
-    { label: 'Restaurants', href: '/seller' }
+    { label: 'Restaurants', href: '/seller' },
+    { label: 'View Active Orders', href: '/order/tracking'}
   ];
 
   return (
     <Stack direction={'row'} spacing={4}>
       {navItems.map((navItem) => (
-        <Link as={RouterLink} to={navItem.href}>
-          <Box key={navItem.label}>
+        <Link as={RouterLink} to={navItem.href} key={navItem.label}>
+          <Box>
             <Button
               p={2}
               height="36px"

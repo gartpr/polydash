@@ -44,7 +44,9 @@ const OrderForm = () => {
         uid: user.uid,
         restaurantId: restaurantId,
         customerName: name,
+        customerName: name,
         email: user.email,
+        address: address,
         address: address,
         paymentInfo: paymentInfo,
         comments: comments,
@@ -70,7 +72,7 @@ const OrderForm = () => {
       // Update the user document with the new array of items
       await updateDoc(userRef, { orders: updatedOrders });
 
-      window.location.href = `/order/tracking/1111`;
+      window.location.href = `/order/tracking`;
     } catch (error) {
       console.error('Error adding order document:', error);
       alert("Something went wrong with your order")
