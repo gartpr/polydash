@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database } from '../firebase-config';
+import { database, db } from '../firebase-config';
 import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
+import { collection, doc, setDoc, where, query, getDocs } from 'firebase/firestore';
 
 function RegisterAndLogin() {
   const [isRightPanelActive, setRightPanelActive] = useState(true);
@@ -16,18 +17,66 @@ function RegisterAndLogin() {
   };
 
   const handleGoogleSignIn = async (e) => {
-    e.preventDefault(); // Prevent the default behavior of the event
+    e.preventDefault();
     const provider = new GoogleAuthProvider();
     try {
+      console.log('Before signInWithPopup:', db);
       const result = await signInWithPopup(database, provider);
       console.log(result, 'Google Sign-In success');
-      
-      history('../');
+
+      addUserDocument(result.user);
+
     } catch (error) {
       console.error(error, 'Google Sign-In error');
     }
   };
+
+  const updateUserDatabase = async (userId, name, email) => {
+    const userRef = doc(db, 'users', userId);
+    await setDoc(userRef, {
+      name: name,
+      email: email,
+    });
+  };
+
+  const addUserDocument = (user) => {
+    addUserDocumentToFirestore(user.uid, user.displayName, user.email);
+  };
+
+  const addUserDocumentToFirestore = async (userId, name, email) => {
+    const usersCollection = collection(db, 'users');
+
+    const q = query(usersCollection, where("email", "==", email));
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      // User doesn't exist, add a new user document
+      const userDocRef = doc(usersCollection, userId);
+      await setDoc(userDocRef, {
+        email: email,
+        name: name,
+      });
+      console.log("Document added with ID:", userDocRef.id);
+      handleSuccessfulLogin(userId)
+    } else {
+      console.log("Document with the same email already exists");
+      history('../')
+    }
+  } catch (error) {
+    console.error("Error adding document:", error);
+    }
+  };
+
+  const handleNavigation = (userId) => {
+    history(`/userinfo/${userId}`);
+  };
   
+  const handleSuccessfulLogin = (userId) => {
+    // Navigate to UserInformation with userId
+    handleNavigation(userId);
+  };
 
   const handleSubmit = async (e, type) => {
     e.preventDefault();
@@ -39,8 +88,12 @@ function RegisterAndLogin() {
         .then(async (data) => {
           console.log(data, 'authData');
           //Create user in database
-        
-          history('../');
+          const userId = data.user.uid;
+
+          // Update user data in the database
+          updateUserDatabase(userId, e.target.name.value, email);
+
+          handleSuccessfulLogin(userId);
         })
         .catch((err) => {
           alert(err.code);
@@ -64,8 +117,6 @@ function RegisterAndLogin() {
   const handleReset = () => {
     history("/reset")
   }
-
-  console.log("Rendering with right panel active:", isRightPanelActive);
 
   return (
     <div className={`RegisterAndLogin ${isRightPanelActive ? 'right-panel-active' : ''}`}>
