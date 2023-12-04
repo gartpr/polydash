@@ -2,8 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from '@firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
-
-
 const firebaseConfig = {
   apiKey: 'AIzaSyD0kS_JsOGFpkOsNEbj3Q3q3mecY0cG2ik',
   authDomain: 'polydash-ba4ca.firebaseapp.com',
