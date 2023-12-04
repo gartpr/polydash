@@ -26,8 +26,7 @@
     "start": "npx react-scripts start",
     "build": "npx react-scripts build",
     "eject": "npx react-scripts eject",
-    "lint": "npx eslint . && npx prettier --check .",
-    "test": "jest"
+    "lint": "npx eslint . && npx prettier --check ."
   },
   "eslintConfig": {
     "extends": [
@@ -54,6 +53,7 @@
     "babel": "^6.23.0",
     "babel-jest": "^29.7.0",
     "eslint-config-react-app": "^7.0.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "jest-environment-jsdom": "^27.5.1"
   },
@@ -61,6 +61,9 @@
     "testEnvironment": "jest-environment-jsdom",
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(png|jpg|jpeg|gif|svg)$": "identity-obj-proxy"
     }
   },
   "babel": {

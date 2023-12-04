@@ -6,6 +6,8 @@ import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../Components/Cart';
 import { addDoc } from 'firebase/firestore';
 
+
+
 test('renders the empty form correctly', () => {
   //render the page
   render(
