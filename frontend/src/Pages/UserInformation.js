@@ -66,6 +66,7 @@ function UserInformation() {
         <div className={"UserInformation"}>
             <form onSubmit={handleSubmit}>
                 <h1>User Information</h1>
+                <br></br>
                 <div className="select-box">
                     <select name="role" defaultValue="" required>
                         <option value="" disabled>
@@ -84,6 +85,7 @@ function UserInformation() {
                     title="Please enter a 10-digit phone number"
                     required
                 />
+                <br></br>
                 <button type="submit">Submit</button>
             </form>
         </div>
