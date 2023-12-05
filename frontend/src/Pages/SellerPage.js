@@ -52,17 +52,17 @@ const SellerPage = () => {
                 orderData.status = 'Received';
               }
 
-              return {
-                ...orderData,
-                id: orderDoc.id,
-                items,
-                restaurant: restaurantData,
-              };
-            }),
-          );
-          console.log(ordersWithDetails);
-          setOrderRequests(ordersWithDetails);
-        };
+          return {
+            ...orderData,
+            id: orderDoc.id,
+            items,
+            restaurant: restaurantData,
+            restaurantName: restaurantData.name,
+          };
+        }));
+        console.log(ordersWithDetails)
+        setOrderRequests(ordersWithDetails);
+      };
 
         fetchOrders().catch(console.error);
       },
