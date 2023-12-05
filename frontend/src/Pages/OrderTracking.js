@@ -45,22 +45,22 @@ const OrderBox = ({ order }) => {
             order.status === 'Cancelled'
               ? 100
               : order.status === 'Not Recieved Yet'
-                ? 0
-                : order.status === 'Received'
-                  ? 10
-                  : order.status === 'Confirmed'
-                    ? 20
-                    : order.status === 'Preparing'
-                      ? 30
-                      : order.status === 'Ready'
-                        ? 40
-                        : order.status === 'Driver Accepted'
-                          ? 50
-                          : order.status === 'Out for delivery'
-                            ? 80
-                            : order.status === 'Delivered'
-                              ? 100
-                              : 0
+              ? 0
+              : order.status === 'Received'
+              ? 10
+              : order.status === 'Confirmed'
+              ? 20
+              : order.status === 'Preparing'
+              ? 30
+              : order.status === 'Ready'
+              ? 40
+              : order.status === 'Driver Accepted'
+              ? 50
+              : order.status === 'Out for delivery'
+              ? 80
+              : order.status === 'Delivered'
+              ? 100
+              : 0
           }
           colorScheme={getStatusColor(order.status)}
           size="sm"

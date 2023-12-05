@@ -238,8 +238,8 @@ const SellerPage = () => {
             {selectedSection === 'new'
               ? 'New Order Requests'
               : selectedSection === 'active'
-                ? 'Active Order Requests'
-                : 'Past Order Requests'}
+              ? 'Active Order Requests'
+              : 'Past Order Requests'}
           </Text>
           <Box display="flex" alignItems="center" px={2}>
             <Text marginRight="1rem">Show:</Text>
@@ -319,8 +319,8 @@ const SellerPage = () => {
               {selectedSection === 'new'
                 ? 'New'
                 : selectedSection === 'active'
-                  ? 'Active'
-                  : 'Past'}{' '}
+                ? 'Active'
+                : 'Past'}{' '}
               Orders.{' '}
             </Text>
           )}
