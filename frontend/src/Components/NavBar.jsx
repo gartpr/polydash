@@ -32,7 +32,7 @@ export default function Navbar() {
 
   const handleClick = () => {
     signOut(database).then((val) => {
-      console.log(val)
+      console.log(val);
       history('/signin');
     });
   };
