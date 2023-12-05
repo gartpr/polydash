@@ -9,7 +9,7 @@ const SellerSearchBar = ({ onSearch, onClear, selectedSection }) => {
   useEffect(() => {
     handleClearFilter();
   }, [selectedSection]);
-  
+
   const handleSearch = () => {
     const filters = {
       query: searchQuery,
@@ -29,12 +29,14 @@ const SellerSearchBar = ({ onSearch, onClear, selectedSection }) => {
   return (
     <Box py={4}>
       <Flex justify="space-between" align="center">
-        <Input ml={2}
+        <Input
+          ml={2}
           placeholder="Search by order number or customer name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <Select ml={2}
+        <Select
+          ml={2}
           placeholder="Filter by status"
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
@@ -45,7 +47,8 @@ const SellerSearchBar = ({ onSearch, onClear, selectedSection }) => {
           <option value="Ready">Ready</option>
           <option value="Cancelled">Cancelled</option>
         </Select>
-        <Select ml={2}
+        <Select
+          ml={2}
           placeholder="Filter by total price"
           value={selectedPriceRange}
           onChange={(e) => setSelectedPriceRange(e.target.value)}
