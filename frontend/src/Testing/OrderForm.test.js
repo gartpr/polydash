@@ -5,15 +5,18 @@ import OrderForm from '../Pages/OrderForm.js';
 import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../Components/Cart';
 import { addDoc } from 'firebase/firestore';
+import { BrowserRouter } from 'react-router-dom';
 
 test("renders the empty form correctly", () => {
     //render the page
     render(
+      <BrowserRouter>
         <AuthProvider>
-            <CartProvider>
-                <OrderForm/>
-            </CartProvider>
+          <CartProvider>
+            <OrderForm />
+          </CartProvider>
         </AuthProvider>
+      </BrowserRouter>
     );
 
     //assure neccesary text is on the page
@@ -42,11 +45,13 @@ test("renders the empty form correctly", () => {
 test("allows input in each box", () => {
     //render the page
     render(
+      <BrowserRouter>
         <AuthProvider>
-            <CartProvider>
-                <OrderForm/>
-            </CartProvider>
+          <CartProvider>
+            <OrderForm />
+          </CartProvider>
         </AuthProvider>
+      </BrowserRouter>
     );
 
     //find each text box
@@ -73,13 +78,15 @@ global.console.log = jest.fn();
 global.window.alert = jest.fn();
   
 test('displays alert and logs messages when user is not signed in', () => {
-    render(
+  render(
+    <BrowserRouter>
       <AuthProvider>
         <CartProvider>
           <OrderForm />
         </CartProvider>
       </AuthProvider>
-    );
+    </BrowserRouter>
+  );
   
     const placeOrderButton = screen.getByRole('button', { name: 'Place Order' });
     fireEvent.click(placeOrderButton);
@@ -114,11 +121,13 @@ jest.mock('../Components/Cart', () => ({
   
 test('allows input in each box and submits the form', async () => {
     render(
-      <AuthProvider>
-        <CartProvider>
-          <OrderForm />
-        </CartProvider>
-      </AuthProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <CartProvider>
+            <OrderForm />
+          </CartProvider>
+        </AuthProvider>
+      </BrowserRouter>
     );
   
     // Check if the items are displayed in the cart summary
@@ -139,15 +148,26 @@ jest.mock('firebase/firestore', () => ({
     ...jest.requireActual('firebase/firestore'),
     addDoc: jest.fn(),
 }));
+
+beforeEach(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+  jest.spyOn(window, 'alert').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
   
 test('handles successful order placement', async () => {
     // Render the component
     render(
-      <AuthProvider>
-        <CartProvider>
-          <OrderForm />
-        </CartProvider>
-      </AuthProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <CartProvider>
+            <OrderForm />
+          </CartProvider>
+        </AuthProvider>
+      </BrowserRouter>
     );
   
     // Find each text box and simulate user input
@@ -164,6 +184,9 @@ test('handles successful order placement', async () => {
     // Simulate a button click to submit the form
     const placeOrderButton = screen.getByRole('button', { name: 'Place Order' });
     fireEvent.click(placeOrderButton);
+
+    const mockError = new Error('Mock error during order placement');
+    addDoc.mockRejectedValueOnce(mockError);
   
     // Mock the Firestore addDoc function to resolve successfully
     addDoc.mockResolvedValueOnce({ id: 'mockOrderId' });
@@ -174,6 +197,9 @@ test('handles successful order placement', async () => {
       expect(addDoc).toHaveBeenCalledWith(expect.anything(), expect.any(Object));
       expect(global.console.log).toHaveBeenCalledWith('Order document added successfully:', 'mockOrderId');
       expect(global.window.location.href).toBe('/order/tracking');
+      
+      expect(console.error).toHaveBeenCalledWith('Error adding order document:', mockError);
+      expect(window.alert).toHaveBeenCalledWith('Something went wrong with your order');
     });
 });
     
