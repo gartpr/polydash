@@ -39,6 +39,7 @@ const SellerPage = () => {
             id: orderDoc.id,
             items,
             restaurant: restaurantData,
+            restaurantName: restaurantData.name,
           };
         }));
         console.log(ordersWithDetails)
@@ -160,6 +161,7 @@ const SellerPage = () => {
     switch (selectedSection) {
       case 'new':
         setNewOrderRequests(orderRequests.filter((order) => order.status === 'Received'));
+
         break;
       case 'active':
         setActiveOrderRequests(orderRequests.filter((order) => ['Confirmed', 'Preparing', 'Ready'].includes(order.status)));
