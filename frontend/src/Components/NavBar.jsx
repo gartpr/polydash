@@ -9,7 +9,7 @@ import {
   Link,
   useDisclosure,
   useColorModeValue,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import logo from '../Images/polydashlogo.png';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ import { database } from '../firebase-config';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
-  
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const history = useNavigate();
 
@@ -31,9 +31,10 @@ export default function Navbar() {
   }, []);
 
   const handleClick = () => {
-    signOut(database).then(val =>{
-      history('/signin')
-    })
+    signOut(database).then((val) => {
+      console.log(val)
+      history('/signin');
+    });
   };
 
   return (
@@ -47,11 +48,13 @@ export default function Navbar() {
         borderBottom={1}
         borderStyle={'solid'}
         borderColor={useColorModeValue('gray.200', 'gray.900')}
-        align={'center'}>
+        align={'center'}
+      >
         <Flex
           flex={{ base: 1, md: 'auto' }}
           ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}>
+          display={{ base: 'flex', md: 'none' }}
+        >
           <IconButton
             onClick={onToggle}
             icon={
@@ -62,7 +65,7 @@ export default function Navbar() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Link as={RouterLink} to='/'>
+          <Link as={RouterLink} to="/">
             <Image src={logo} width="auto" height="38px" />
           </Link>
 
@@ -75,36 +78,37 @@ export default function Navbar() {
           flex={{ base: 1, md: 0 }}
           justify={'flex-end'}
           direction={'row'}
-          spacing={6}>
+          spacing={6}
+        >
           {isAuthenticated ? (
-          <Button
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'#0da955'} 
-            onClick={handleClick}
-            _hover={{
-              bg: '#60e290',
-            }}
-          >
-            Sign Out
-          </Button>
-        ) : (
-          <Link as={RouterLink} to="/signin">
             <Button
-              display={{ base: 'none', md: 'inline-flex' }}
               fontSize={'sm'}
               fontWeight={600}
               color={'white'}
               bg={'#0da955'}
+              onClick={handleClick}
               _hover={{
                 bg: '#60e290',
               }}
             >
-              Sign In
+              Sign Out
             </Button>
-          </Link>
-        )}
+          ) : (
+            <Link as={RouterLink} to="/signin">
+              <Button
+                display={{ base: 'none', md: 'inline-flex' }}
+                fontSize={'sm'}
+                fontWeight={600}
+                color={'white'}
+                bg={'#0da955'}
+                _hover={{
+                  bg: '#60e290',
+                }}
+              >
+                Sign In
+              </Button>
+            </Link>
+          )}
         </Stack>
       </Flex>
     </Box>
@@ -116,11 +120,11 @@ const DesktopNav = () => {
   const linkHoverColor = useColorModeValue('gray.800', 'white');
 
   const navItems = [
-    { label: 'Home', href: "/" },
-    { label: 'Orders', href: "/order" },
+    { label: 'Home', href: '/' },
+    { label: 'Orders', href: '/order' },
     { label: 'Drivers', href: '/delivery' },
     { label: 'Restaurants', href: '/seller' },
-    { label: 'View Active Orders', href: '/order/tracking'}
+    { label: 'View Active Orders', href: '/order/tracking' },
   ];
 
   return (
@@ -139,7 +143,8 @@ const DesktopNav = () => {
               _hover={{
                 textDecoration: 'none',
                 color: linkHoverColor,
-              }}>
+              }}
+            >
               {navItem.label}
             </Button>
           </Box>
