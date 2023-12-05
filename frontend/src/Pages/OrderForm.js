@@ -10,15 +10,17 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-import { collection, addDoc,getDoc, updateDoc,doc } from "firebase/firestore"
+import { collection, addDoc,getDoc, updateDoc, doc } from "firebase/firestore"
 import { db } from "../firebase-config"
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../Components/Cart';
+import { useNavigate } from 'react-router-dom';
 
 
 const OrderForm = () => {
   const { cartItems, removeFromCart, getCartTotal } = useCart();
   const user = useAuth();
+  const navigate = useNavigate();
 
   // State for location and payment information
   const [address, setAddress] = useState('');
@@ -40,7 +42,7 @@ const OrderForm = () => {
     try {
       const orderDocRef = await addDoc(orderCollectionRef, {
         orderNumber: "1",
-        status: "Not Recieved Yet",
+        status: "Not Received Yet",
         customerName: name,
         customerEmail: user.email,
         deliverDriverId: "",
@@ -70,7 +72,7 @@ const OrderForm = () => {
       // Update the user document with the new array of items
       await updateDoc(userRef, { orders: updatedOrders });
 
-      window.location.href = `/order/tracking`;
+      navigate(`/order/tracking`);
     } catch (error) {
       console.error('Error adding order document:', error);
       alert("Something went wrong with your order")
