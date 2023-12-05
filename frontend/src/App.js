@@ -1,5 +1,4 @@
 import './App.css';
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import DeliveryPage from './Pages/DeliveryPage.js';
 import OrderPage from './Pages/OrderPage.js';
@@ -21,7 +20,7 @@ function App() {
         <Route path="/order" element={<OrderPage />} />
         <Route path="/seller" element={<SellerPage />} />
         <Route path="/order/form" element={<OrderForm />} />
-        <Route path="/order/menu/:restaurantId" element={<RestaurantMenu />} />
+        <Route path="/order/menu/:restaurantId" element={<RestaurantMenu />} /> 
         <Route path="/order/tracking" element={<OrderTrackingPage />} />
         <Route path="/signin" element={<RegisterAndLogin />} />
         <Route path="/reset" element={<ForgotPassword />} />
