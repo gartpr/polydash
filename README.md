@@ -7,6 +7,7 @@ Our product, PolyDash, is for students/professors who don’t feel like walking 
 - [UI Prototype](#ui-prototype)
 - [Development Environment Setup](#development-environment-setup)
 - [Diagrams](#diagrams)
+- [Continuous Deployment](#continuous-deployment)
 
 ## Developers
 - Garrett
@@ -52,3 +53,7 @@ Look at our Figma page to view the original vision of this of this project: [Pol
 ## Diagrams
 
 For more detailed information about the project architecture and object diagrams, check out our [Wiki Page]().
+
+## Continuous Deployment
+
+View our hosted website here [Polydash]().
