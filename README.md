@@ -52,8 +52,8 @@ Look at our Figma page to view the original vision of this of this project: [Pol
 
 ## Diagrams
 
-For more detailed information about the project architecture and object diagrams, check out our [Wiki Page]().
+For more detailed information about the project architecture and object diagrams, check out our [Wiki Page](https://github.com/gartpr/polydash/wiki).
 
 ## Continuous Deployment
 
-View our hosted website here [Polydash]().
+View our hosted website here [Polydash](https://proud-water-08819841e.4.azurestaticapps.net).
