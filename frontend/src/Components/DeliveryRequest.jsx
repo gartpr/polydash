@@ -12,7 +12,6 @@ import { db } from '../firebase-config';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 const DeliveryRequest = ({ order }) => {
-
   const acceptDelivery = async (orderID) => {
     const orderDocRef = doc(db, 'orders', orderID);
     await updateDoc(orderDocRef, {
