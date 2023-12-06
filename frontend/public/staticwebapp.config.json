@@ -1,6 +1,7 @@
 {
+    "routes": [],
     "navigationFallback": {
-        "rewrite": "./index.html",
+        "rewrite": "/index.html",
         "exclude": ["/static/images/*.{png,jpg,gif}", "/static/css/*"]
     },
     "mimeTypes": {
