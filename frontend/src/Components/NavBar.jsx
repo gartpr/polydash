@@ -151,7 +151,7 @@ const DesktopNav = ({ user }) => {
     { label: 'Drivers', href: '/delivery', roles: ['driver'] },
     { label: 'Restaurants', href: '/seller', roles: ['restaurant'] },
     { label: 'View Active Orders', href: '/order/tracking', roles: ['customer'] },
-    { label: 'Contact Us', href: '/contact', roles: ['customer', 'driver', 'restaurant'] },
+    { label: 'Contact Us', href: '/contact'},
   ];
 
   if (user === null) {
