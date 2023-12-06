@@ -31,6 +31,7 @@ function UserInformation() {
     } else {
       console.error('Unknown user role');
     }
+    window.location.reload();
   };
 
   const handleSubmit = async (e) => {
