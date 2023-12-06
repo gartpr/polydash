@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Center } from '@chakra-ui/react';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -151,6 +152,7 @@ function RegisterAndLogin() {
         isRightPanelActive ? 'right-panel-active' : ''
       }`}
     >
+      <Center h="100vh">
       <div
         className={`form-container sign-up-container ${
           isRightPanelActive ? 'hidden' : ''
@@ -233,6 +235,7 @@ function RegisterAndLogin() {
           </div>
         </div>
       </div>
+      </Center>
     </div>
   );
 }
