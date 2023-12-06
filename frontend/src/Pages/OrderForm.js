@@ -14,6 +14,7 @@ import { collection, addDoc, getDoc, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../Components/Cart';
+import { useNavigate } from 'react-router-dom';
 
 const OrderForm = () => {
   const { cartItems, removeFromCart, getCartTotal } = useCart();
@@ -79,7 +80,7 @@ const OrderForm = () => {
       // Update the user document with the new array of items
       await updateDoc(userRef, { orders: updatedOrders });
 
-      window.location.href = `/order/tracking`;
+      navigate(`/order/tracking`);
     } catch (error) {
       console.error('Error adding order document:', error);
       alert('Something went wrong with your order');
