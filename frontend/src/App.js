@@ -11,6 +11,7 @@ import RegisterAndLogin from './Pages/RegisterAndLogin.js';
 import ForgotPassword from './Pages/ForgotPassword';
 import OrderTrackingPage from './Pages/OrderTracking.js';
 import UserInformation from './Pages/UserInformation';
+import ContactPage from './Pages/ContactPage.js';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/signin" element={<RegisterAndLogin />} />
         <Route path="/reset" element={<ForgotPassword />} />
         <Route path="/userinfo/:userId" element={<UserInformation />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </div>
   );
