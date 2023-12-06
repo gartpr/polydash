@@ -125,6 +125,7 @@ const DesktopNav = () => {
     { label: 'Drivers', href: '/delivery' },
     { label: 'Restaurants', href: '/seller' },
     { label: 'View Active Orders', href: '/order/tracking' },
+    { label: 'Contact Us', href: '/contact' }
   ];
 
   return (
