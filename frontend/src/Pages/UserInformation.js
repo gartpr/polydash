@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db } from '../firebase-config';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -7,8 +7,6 @@ import './UserInformation.css';
 function UserInformation() {
   const navigate = useNavigate();
   const { userId } = useParams();
-  const [setRole] = useState('');
-  const [setPhoneNumber] = useState('');
 
   const fetchUserRole = async (userId) => {
     const userDocRef = doc(collection(db, 'users'), userId);
@@ -46,9 +44,6 @@ function UserInformation() {
       // Display an error or prevent form submission
       return;
     }
-
-    setRole(selectedRole);
-    setPhoneNumber(enteredPhoneNumber);
 
     const userCollectionRef = collection(db, 'users');
 
