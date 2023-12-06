@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database, db } from '../firebase-config';
+import { auth, db } from '../firebase-config';
 import './RegisterAndLogin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
@@ -21,7 +21,7 @@ function RegisterAndLogin() {
     const provider = new GoogleAuthProvider();
     try {
       console.log('Before signInWithPopup:', db);
-      const result = await signInWithPopup(database, provider);
+      const result = await signInWithPopup(auth, provider);
       console.log(result, 'Google Sign-In success');
 
       addUserDocument(result.user);
@@ -101,7 +101,7 @@ function RegisterAndLogin() {
     const password = e.target.password.value;
 
     if (type === 'signup') {
-      createUserWithEmailAndPassword(database, email, password)
+      createUserWithEmailAndPassword(auth, email, password)
         .then(async (data) => {
           console.log(data, 'authData');
           //Create user in database
@@ -117,7 +117,7 @@ function RegisterAndLogin() {
           setRightPanelActive(true);
         });
     } else if (type === 'signin') {
-      signInWithEmailAndPassword(database, email, password)
+      signInWithEmailAndPassword(auth, email, password)
         .then((data) => {
           console.log(data, 'authData');
           handleSuccessfulLogin(data.user.uid);
