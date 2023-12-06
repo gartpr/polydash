@@ -57,7 +57,7 @@ const OrderBox = ({ order }) => {
               ? 40
               : order.status === 'Driver Accepted'
               ? 50
-              : order.status === 'Out for delivery'
+              : order.status === 'Out for Delivery'
               ? 80
               : order.status === 'Delivered'
               ? 100
