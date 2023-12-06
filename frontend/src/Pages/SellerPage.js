@@ -124,14 +124,14 @@ const SellerPage = () => {
       ]);
     }
 
-    if (newStatus === 'Received') {
+    if (['Received'].includes(newStatus)) {
       setActiveOrderRequests((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId),
       );
       setNewOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
     }
 
-    if (['Out for Delivery', 'Delivered', 'Cancelled'].includes(newStatus)) {
+    if (['Driver Accepted', 'Out for Delivery', 'Delivered', 'Cancelled'].includes(newStatus)) {
       setActiveOrderRequests((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId),
       );
@@ -156,7 +156,7 @@ const SellerPage = () => {
     }
     filteredOrders = filteredOrders.filter((order) => {
       const queryMatch =
-        String(order.number).includes(filters.query) ||
+        String(order.orderNumber).includes(filters.query) ||
         order.customerName.toLowerCase().includes(filters.query.toLowerCase());
 
       const statusMatch =
@@ -200,7 +200,7 @@ const SellerPage = () => {
       case 'past':
         setPastOrderRequests(
           orderRequests.filter((order) =>
-            ['Picked Up', 'Cancelled'].includes(order.status),
+            ['Driver Accepted', 'Cancelled'].includes(order.status),
           ),
         );
         break;

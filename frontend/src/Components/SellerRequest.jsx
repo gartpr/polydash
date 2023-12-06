@@ -19,7 +19,7 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
         <AccordionButton>
           <Box flex="1" textAlign="left">
             <Text as="i" mt={2} fontWeight="semibold">
-              Order #{order.orderNumber} - Status: {order.status}
+              {order.restaurantName} - Order #{order.orderNumber} - Status: {order.status}
             </Text>
           </Box>
           <AccordionIcon />
@@ -27,9 +27,6 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
       </h2>
       <AccordionPanel pb={4}>
         <Text fontWeight="bold">Order Information:</Text>
-        <Text mt={2}>
-          Restaurant Name: {order.restaurant ? order.restaurant.name : 'N/A'}
-        </Text>
         <Text mt={2}>Customer Name: {order.customerName}</Text>
         <Text mt={2}>Customer Email: {order.customerEmail}</Text>
         <Text mt={2}>Delivery Address: {order.address}</Text>
