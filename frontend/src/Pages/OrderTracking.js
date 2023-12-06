@@ -44,7 +44,7 @@ const OrderBox = ({ order }) => {
           value={
             order.status === 'Cancelled'
               ? 100
-              : order.status === 'Not Recieved Yet'
+              : order.status === 'Not Received Yet'
               ? 0
               : order.status === 'Received'
               ? 10
