@@ -35,7 +35,7 @@ const OrderBox = ({ order }) => {
       p="4"
       mb="4"
     >
-      <Text fontSize="lg">Order #{order.id}</Text>
+      <Text fontSize="lg">Order #{order.orderNumber}</Text>
       <Text fontSize="md">Restaurant: {order.restaurantName}</Text>
       <Text fontSize="md">Price: ${order.totalPrice}</Text>
       <HStack mt={2}>
