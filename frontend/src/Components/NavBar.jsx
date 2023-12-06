@@ -14,27 +14,53 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import logo from '../Images/polydashlogo.png';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { database } from '../firebase-config';
+import { auth, db } from '../firebase-config';
+import { doc, collection, getDoc} from "firebase/firestore";
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const history = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(database, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsAuthenticated(!!user);
+
+      if (user){
+        const usersCollection = collection(db, 'users');
+        const userDocRef = doc(usersCollection, user.uid);
+
+        try{
+          const userDocSnapshot = await getDoc(userDocRef);
+
+          if (userDocSnapshot.exists()){
+            const userData = userDocSnapshot.data();
+
+            const userRole = userData.role;
+            console.log(userRole);
+            setUser(userRole)
+
+          }
+        } catch(error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const handleClick = () => {
-    signOut(database).then((val) => {
-      console.log(val);
+  const handleClick = async () => {
+    try {
+      await signOut(auth);
+      setIsAuthenticated(false);
+      setUser(null);
       history('/signin');
-    });
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -70,7 +96,7 @@ export default function Navbar() {
           </Link>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-            <DesktopNav />
+            <DesktopNav user={user}/>
           </Flex>
         </Flex>
 
@@ -115,23 +141,23 @@ export default function Navbar() {
   );
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({ user }) => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
 
   const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'Orders', href: '/order' },
-    { label: 'Drivers', href: '/delivery' },
-    { label: 'Restaurants', href: '/seller' },
-    { label: 'View Active Orders', href: '/order/tracking' },
-    { label: 'Contact Us', href: '/contact' }
+    { label: 'Orders', href: '/order', roles: ['customer'] },
+    { label: 'Drivers', href: '/delivery', roles: ['driver'] },
+    { label: 'Restaurants', href: '/seller', roles: ['restaurant'] },
+    { label: 'View Active Orders', href: '/order/tracking', roles: ['customer'] },
+    { label: 'Contact Us', href: '/contact', roles: ['customer', 'driver', 'restaurant'] },
   ];
 
-  return (
-    <Stack direction={'row'} spacing={4}>
-      {navItems.map((navItem) => (
-        <Link as={RouterLink} to={navItem.href} key={navItem.label}>
+  if (user === null) {
+    return (
+      <Stack direction={'row'} spacing={4}>
+        <Link as={RouterLink} to="/">
           <Box>
             <Button
               p={2}
@@ -140,17 +166,46 @@ const DesktopNav = () => {
               fontWeight={700}
               bg="#E4E3D3"
               color={linkColor}
-              href={navItem.href}
+              href="/"
               _hover={{
                 textDecoration: 'none',
                 color: linkHoverColor,
               }}
             >
-              {navItem.label}
+              Home
             </Button>
           </Box>
         </Link>
-      ))}
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack direction={'row'} spacing={4}>
+      {navItems.map(
+        (navItem) =>
+          (!navItem.roles || navItem.roles.includes(user)) && (
+            <Link as={RouterLink} to={navItem.href} key={navItem.label}>
+              <Box>
+                <Button
+                  p={2}
+                  height="36px"
+                  fontSize={'sm'}
+                  fontWeight={700}
+                  bg="#E4E3D3"
+                  color={linkColor}
+                  href={navItem.href}
+                  _hover={{
+                    textDecoration: 'none',
+                    color: linkHoverColor,
+                  }}
+                >
+                  {navItem.label}
+                </Button>
+              </Box>
+            </Link>
+          )
+      )}
     </Stack>
   );
 };

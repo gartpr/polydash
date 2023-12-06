@@ -47,6 +47,14 @@ const SellerPage = () => {
                   : null;
               }
 
+              if (restaurantData) {
+                const orderRef = doc(db, 'orders', orderDoc.id);
+                await updateDoc(orderRef, {
+                  restaurantName: restaurantData.name,
+                });
+                orderData.restaurantName = restaurantData.name;
+              }
+
               if (orderData.status === 'Not Received Yet') {
                 await updateOrderStatus(orderDoc.id, 'Received');
                 orderData.status = 'Received';
@@ -57,7 +65,6 @@ const SellerPage = () => {
             id: orderDoc.id,
             items,
             restaurant: restaurantData,
-            restaurantName: restaurantData.name,
           };
         }));
         console.log(ordersWithDetails)
@@ -124,7 +131,7 @@ const SellerPage = () => {
       setNewOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
     }
 
-    if (['Picked Up', 'Cancelled'].includes(newStatus)) {
+    if (['Out for Delivery', 'Delivered', 'Cancelled'].includes(newStatus)) {
       setActiveOrderRequests((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId),
       );

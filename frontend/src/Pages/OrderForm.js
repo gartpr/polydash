@@ -40,7 +40,7 @@ const OrderForm = () => {
     try {
       const orderDocRef = await addDoc(orderCollectionRef, {
         orderNumber: '1',
-        status: 'Not Recieved Yet',
+        status: 'Not Received Yet',
         customerName: name,
         customerEmail: user.email,
         deliverDriverId: '',
