@@ -176,6 +176,25 @@ const DesktopNav = ({ user }) => {
             </Button>
           </Box>
         </Link>
+        <Link as={RouterLink} to="/contact">
+          <Box>
+            <Button
+              p={2}
+              height="36px"
+              fontSize={'sm'}
+              fontWeight={700}
+              bg="#E4E3D3"
+              color={linkColor}
+              href="/"
+              _hover={{
+                textDecoration: 'none',
+                color: linkHoverColor,
+              }}
+            >
+              Contact Us
+            </Button>
+          </Box>
+        </Link>
       </Stack>
     );
   }
