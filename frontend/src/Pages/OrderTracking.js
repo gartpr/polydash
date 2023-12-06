@@ -10,6 +10,7 @@ import {
 import { getDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router'
 
 const OrderBox = ({ order }) => {
   const getStatusColor = (status) => {
@@ -35,7 +36,7 @@ const OrderBox = ({ order }) => {
       mb="4"
     >
       <Text fontSize="lg">Order #{order.id}</Text>
-      <Text fontSize="md">Restaurant: {order.restaurantId}</Text>
+      <Text fontSize="md">Restaurant: {order.restaurantName}</Text>
       <Text fontSize="md">Price: ${order.totalPrice}</Text>
       <HStack mt={2}>
         <Progress
@@ -77,6 +78,7 @@ const OrderBox = ({ order }) => {
 const OrderTrackingPage = () => {
   const [orders, setOrders] = useState([]);
   const user = useAuth();
+  const navigate = useNavigate()
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -102,7 +104,7 @@ const OrderTrackingPage = () => {
 
   const handleRefresh = () => {
     fetchOrders();
-    window.location.reload();
+    navigate(0);
   };
 
   useEffect(() => {

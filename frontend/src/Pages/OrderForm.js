@@ -25,6 +25,7 @@ const OrderForm = () => {
   const [name, setName] = useState('');
   const [paymentInfo, setPaymentInfo] = useState('');
   const [comments, setComments] = useState('');
+  const navigate = useNavigate();
 
   const orderCollectionRef = collection(db, 'orders');
 
@@ -80,7 +81,7 @@ const OrderForm = () => {
       // Update the user document with the new array of items
       await updateDoc(userRef, { orders: updatedOrders });
 
-      navigate(`/order/tracking`);
+      navigate("/order/tracking");
     } catch (error) {
       console.error('Error adding order document:', error);
       alert('Something went wrong with your order');
