@@ -276,7 +276,7 @@ const SellerPage = () => {
             >
               {newOrderRequests.map((request) => (
                 <SellerRequest
-                  key={`${selectedSection}-${request.id}`}
+                  key={`${request.id}-${request.status}`}
                   order={request}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   isPastOrder={false}
@@ -294,7 +294,7 @@ const SellerPage = () => {
             >
               {activeOrderRequests.map((request) => (
                 <SellerRequest
-                  key={`${selectedSection}-${request.id}`}
+                  key={`${request.id}-${request.status}`}
                   order={request}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   isPastOrder={false}
@@ -312,7 +312,7 @@ const SellerPage = () => {
             >
               {pastOrderRequests.map((request) => (
                 <SellerRequest
-                  key={`${selectedSection}-${request.id}`}
+                  key={`${request.id}-${request.status}`}
                   order={request}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   isPastOrder={true}

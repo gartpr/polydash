@@ -36,12 +36,24 @@ const OrderForm = () => {
       alert('You must be signed in to place an order');
       return;
     }
-    const restaurantId =
-      cartItems.length > 0 ? cartItems[0].restaurantId : null;
-    // Handle the order placement logic here, e.g., send data to a server
+    const restaurantId = cartItems.length > 0 ? cartItems[0].restaurantId : null;
+
+    if (!restaurantId) {
+        console.error('No restaurant ID found');
+        return;
+    }
     try {
+      const restaurantRef = doc(db, 'restaurants', restaurantId);
+      const restaurantDoc = await getDoc(restaurantRef);
+
+      let orderNumber = 1; // Default if no counter exists yet
+      if (restaurantDoc.exists() && restaurantDoc.data().orderCounter !== undefined) {
+          orderNumber = restaurantDoc.data().orderCounter;
+      }
+      console.log(orderNumber);
+
       const orderDocRef = await addDoc(orderCollectionRef, {
-        orderNumber: '1',
+        orderNumber: orderNumber,
         status: 'Not Received Yet',
         customerName: name,
         customerEmail: user.email,
@@ -67,6 +79,12 @@ const OrderForm = () => {
       for (const item of cartItems) {
         await addDoc(itemsCollectioNRef, item);
       }
+
+      // Update the restaurant document with the new counter
+      await updateDoc(restaurantRef, {
+          orderCounter: orderNumber + 1
+      });
+
       console.log('Order document added successfully:', orderDocRef.id);
       const userRef = doc(db, 'users', user.uid);
 
