@@ -15,7 +15,7 @@ import logo from '../Images/polydashlogo.png';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebase-config';
-import { doc, collection, getDoc} from "firebase/firestore";
+import { doc, collection, getDoc } from 'firebase/firestore';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
@@ -28,22 +28,21 @@ export default function Navbar() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsAuthenticated(!!user);
 
-      if (user){
+      if (user) {
         const usersCollection = collection(db, 'users');
         const userDocRef = doc(usersCollection, user.uid);
 
-        try{
+        try {
           const userDocSnapshot = await getDoc(userDocRef);
 
-          if (userDocSnapshot.exists()){
+          if (userDocSnapshot.exists()) {
             const userData = userDocSnapshot.data();
 
             const userRole = userData.role;
             console.log(userRole);
-            setUser(userRole)
-
+            setUser(userRole);
           }
-        } catch(error) {
+        } catch (error) {
           console.error('Error fetching user data:', error);
         }
       }
@@ -96,7 +95,7 @@ export default function Navbar() {
           </Link>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-            <DesktopNav user={user}/>
+            <DesktopNav user={user} />
           </Flex>
         </Flex>
 
@@ -150,8 +149,12 @@ const DesktopNav = ({ user }) => {
     { label: 'Orders', href: '/order', roles: ['customer'] },
     { label: 'Drivers', href: '/delivery', roles: ['driver'] },
     { label: 'Restaurants', href: '/seller', roles: ['restaurant'] },
-    { label: 'View Active Orders', href: '/order/tracking', roles: ['customer'] },
-    { label: 'Contact Us', href: '/contact'},
+    {
+      label: 'View Active Orders',
+      href: '/order/tracking',
+      roles: ['customer'],
+    },
+    { label: 'Contact Us', href: '/contact' },
   ];
 
   if (user === null) {
@@ -223,7 +226,7 @@ const DesktopNav = ({ user }) => {
                 </Button>
               </Box>
             </Link>
-          )
+          ),
       )}
     </Stack>
   );

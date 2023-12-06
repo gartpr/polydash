@@ -33,17 +33,32 @@ const Home = () => {
       return (
         <HStack spacing={8}>
           <Link to="/signin">
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
+            <Button
+              fontSize="2xl"
+              size="lg"
+              colorScheme="teal"
+              variant="outline"
+            >
               Order
             </Button>
           </Link>
           <Link to="/signin">
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
+            <Button
+              fontSize="2xl"
+              size="lg"
+              colorScheme="teal"
+              variant="outline"
+            >
               Deliver
             </Button>
           </Link>
           <Link to="/signin">
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
+            <Button
+              fontSize="2xl"
+              size="lg"
+              colorScheme="teal"
+              variant="outline"
+            >
               Sell
             </Button>
           </Link>
@@ -56,7 +71,12 @@ const Home = () => {
       case 'customer':
         return (
           <Link to="/order">
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
+            <Button
+              fontSize="2xl"
+              size="lg"
+              colorScheme="teal"
+              variant="outline"
+            >
               Order
             </Button>
           </Link>
@@ -64,7 +84,12 @@ const Home = () => {
       case 'driver':
         return (
           <Link to="/delivery">
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
+            <Button
+              fontSize="2xl"
+              size="lg"
+              colorScheme="teal"
+              variant="outline"
+            >
               Deliver
             </Button>
           </Link>
@@ -72,7 +97,12 @@ const Home = () => {
       case 'restaurant':
         return (
           <Link to="/seller">
-            <Button fontSize="2xl" size="lg" colorScheme="teal" variant="outline">
+            <Button
+              fontSize="2xl"
+              size="lg"
+              colorScheme="teal"
+              variant="outline"
+            >
               Sell
             </Button>
           </Link>

@@ -10,7 +10,7 @@ import {
 import { getDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router';
 
 const OrderBox = ({ order }) => {
   const getStatusColor = (status) => {
@@ -78,7 +78,7 @@ const OrderBox = ({ order }) => {
 const OrderTrackingPage = () => {
   const [orders, setOrders] = useState([]);
   const user = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchOrders = useCallback(async () => {
     try {

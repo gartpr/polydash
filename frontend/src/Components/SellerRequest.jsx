@@ -19,7 +19,8 @@ const SellerRequest = ({ order, onUpdateOrderStatus, isPastOrder }) => {
         <AccordionButton>
           <Box flex="1" textAlign="left">
             <Text as="i" mt={2} fontWeight="semibold">
-              {order.restaurantName} - Order #{order.orderNumber} - Status: {order.status}
+              {order.restaurantName} - Order #{order.orderNumber} - Status:{' '}
+              {order.status}
             </Text>
           </Box>
           <AccordionIcon />

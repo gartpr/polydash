@@ -1,24 +1,24 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../firebase-config";
-import "./ForgotPassword.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../firebase-config';
+import './ForgotPassword.css';
 
 function ForgotPassword() {
   const history = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const emailVal = e.target.email.value;
-        sendPasswordResetEmail(auth, emailVal)
-            .then(() => {
-                alert("Check your email for password reset instructions.");
-                history('/signin');
-            })
-            .catch((err) => {
-                alert(err.code);
-            });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const emailVal = e.target.email.value;
+    sendPasswordResetEmail(auth, emailVal)
+      .then(() => {
+        alert('Check your email for password reset instructions.');
+        history('/signin');
+      })
+      .catch((err) => {
+        alert(err.code);
+      });
+  };
 
   return (
     <div>

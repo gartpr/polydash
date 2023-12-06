@@ -60,16 +60,17 @@ const SellerPage = () => {
                 orderData.status = 'Received';
               }
 
-          return {
-            ...orderData,
-            id: orderDoc.id,
-            items,
-            restaurant: restaurantData,
-          };
-        }));
-        console.log(ordersWithDetails)
-        setOrderRequests(ordersWithDetails);
-      };
+              return {
+                ...orderData,
+                id: orderDoc.id,
+                items,
+                restaurant: restaurantData,
+              };
+            }),
+          );
+          console.log(ordersWithDetails);
+          setOrderRequests(ordersWithDetails);
+        };
 
         fetchOrders().catch(console.error);
       },
@@ -131,7 +132,14 @@ const SellerPage = () => {
       setNewOrderRequests((currentOrders) => [...currentOrders, updatedOrder]);
     }
 
-    if (['Driver Accepted', 'Out for Delivery', 'Delivered', 'Cancelled'].includes(newStatus)) {
+    if (
+      [
+        'Driver Accepted',
+        'Out for Delivery',
+        'Delivered',
+        'Cancelled',
+      ].includes(newStatus)
+    ) {
       setActiveOrderRequests((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId),
       );

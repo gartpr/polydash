@@ -215,7 +215,12 @@ test('handles successful order placement', async () => {
     );
     expect(global.window.location.href).toBe('/order/tracking');
 
-    expect(console.error).toHaveBeenCalledWith('Error adding order document:', mockError);
-    expect(window.alert).toHaveBeenCalledWith('Something went wrong with your order');
+    expect(console.error).toHaveBeenCalledWith(
+      'Error adding order document:',
+      mockError,
+    );
+    expect(window.alert).toHaveBeenCalledWith(
+      'Something went wrong with your order',
+    );
   });
 });
