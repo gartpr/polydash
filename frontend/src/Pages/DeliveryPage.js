@@ -50,7 +50,7 @@ const DeliveryPage = () => {
         pickedUpOrders.push(order);
       } else if (order.status === 'Delivered') {
         deliveredOrders.push(order);
-      } else {
+      } else if (order.status === 'Ready') {
         activeOrders.push(order);
       }
     });
