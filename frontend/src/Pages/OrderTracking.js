@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router'
 const OrderBox = ({ order }) => {
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Out for delivery':
+      case 'Out for Delivery':
         return 'green';
       case 'Delivered':
         return 'green';
