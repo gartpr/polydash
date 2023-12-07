@@ -8,6 +8,7 @@ Our product, PolyDash, is for students/professors who don’t feel like walking 
 - [Development Environment Setup](#development-environment-setup)
 - [Diagrams](#diagrams)
 - [Continuous Deployment](#continuous-deployment)
+- [Demo Video](#demo-video)
 
 ## Developers
 - Garrett
@@ -57,3 +58,7 @@ For more detailed information about the project architecture and object diagrams
 ## Continuous Deployment
 
 View our hosted website here [Polydash](https://proud-water-08819841e.4.azurestaticapps.net).
+
+## Demo Video
+
+Watch our demo video [here](https://www.youtube.com/watch?v=x8AcVAkMIYU).
